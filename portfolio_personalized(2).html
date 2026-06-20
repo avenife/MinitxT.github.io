@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<title>Photography Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CUSTOMIZE ME: see the CONFIG object near the top of the
+   <script> at the bottom of this file for your name, bio,
+   contact links, and the edit-mode passcode.
+   ============================================================ */
+
+:root{
+  --void: #0a0810;
+  --panel: #161025;
+  --panel-2: #1f1730;
+  --sakura: #ff4fb0;
+  --sakura-soft: #ff9bd6;
+  --cyan: #39e6c8;
+  --ink: #f3edf6;
+  --ink-muted: #9089a3;
+  --line: rgba(255,79,176,0.18);
+  --shadow-sakura: 0 0 24px rgba(255,79,176,0.45);
+  --shadow-cyan: 0 0 18px rgba(57,230,200,0.45);
+  --font-display: 'Unbounded', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin:0;
+  background: var(--void);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar{ width:10px; }
+::-webkit-scrollbar-track{ background: var(--void); }
+::-webkit-scrollbar-thumb{ background: var(--panel-2); border-radius:6px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--sakura); }
+
+a{ color: inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+button{ font-family: var(--font-body); cursor:pointer; }
+input{ font-family: var(--font-body); }
+
+.mono{ font-family: var(--font-mono); }
+
+:focus-visible{
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- ambient background layers ---------- */
+.bg-glow{
+  position: fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 18% 12%, rgba(255,79,176,0.16), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 85% 30%, rgba(57,230,200,0.10), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,79,176,0.10), transparent 60%);
+}
+.grain{
+  position: fixed; inset:0; z-index:1; pointer-events:none; opacity:0.05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.petals{ position: fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+.petal{
+  position:absolute; top:-5vh;
+  width:10px; height:10px;
+  background: radial-gradient(circle at 30% 30%, var(--sakura-soft), var(--sakura) 65%, transparent 100%);
+  border-radius: 0 60% 0 60%;
+  filter: blur(0.3px);
+  box-shadow: 0 0 8px rgba(255,79,176,0.7);
+  animation: drift linear infinite;
+  opacity:0.75;
+}
+@keyframes drift{
+  0%{ transform: translate(0,0) rotate(0deg); }
+  50%{ transform: translate(40px, 55vh) rotate(180deg); }
+  100%{ transform: translate(-10px, 115vh) rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce){
+  .petal{ animation: none; opacity:0.3; }
+  html{ scroll-behavior:auto; }
+}
+
+main, header, footer{ position: relative; z-index:2; }
+
+/* ---------- nav ---------- */
+.nav{
+  position: fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 18px clamp(20px,5vw,56px);
+  background: rgba(10,8,16,0.55);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-family: var(--font-display); font-weight:700; letter-spacing:0.04em;
+  font-size: 1rem; color: var(--ink);
+}
+.brand-mark{
+  width:20px; height:20px; border-radius:50%;
+  border:2px solid var(--sakura);
+  box-shadow: var(--shadow-sakura);
+  position:relative;
+}
+.brand-mark::after{
+  content:''; position:absolute; inset:5px; border-radius:50%; background: var(--sakura);
+}
+.nav-links{ display:flex; align-items:center; gap: clamp(14px,2vw,32px); }
+.nav-links a{
+  font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color: var(--ink-muted);
+  transition: color 0.2s;
+}
+.nav-links a:hover{ color: var(--sakura-soft); }
+.btn-edit{
+  background:transparent; border:1px solid var(--line); color: var(--ink-muted);
+  font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
+  padding:7px 14px; border-radius:999px; transition: all 0.2s;
+}
+.btn-edit:hover{ border-color: var(--sakura); color: var(--sakura-soft); }
+body.is-editing .btn-edit{ border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 14px rgba(57,230,200,0.25); }
+
+/* ---------- hero ---------- */
+.hero{
+  min-height: 100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding: 140px 20px 80px; position:relative;
+}
+.hero-eyebrow{
+  font-family: var(--font-mono); font-size:0.72rem; letter-spacing:0.25em; text-transform:uppercase;
+  color: var(--cyan); margin-bottom:18px; opacity:0.9;
+}
+.hero h1{
+  font-family: var(--font-display); font-weight:800;
+  font-size: clamp(3rem, 11vw, 7.5rem); line-height:0.95; margin:0;
+  color: var(--ink);
+  text-shadow: 0 0 18px rgba(255,79,176,0.55), 0 0 50px rgba(255,79,176,0.25);
+  letter-spacing: -0.01em;
+}
+.hero p.tagline{
+  margin-top:22px; max-width: 36em; font-size: clamp(1rem,2vw,1.15rem);
+  color: var(--ink-muted); font-weight:300;
+}
+.shutter{
+  margin-top:48px; width:88px; height:88px; border-radius:50%;
+  border:1.5px dashed var(--sakura); display:flex; align-items:center; justify-content:center;
+  background: transparent; color: var(--sakura-soft); position:relative;
+  animation: spin 26s linear infinite;
+  transition: box-shadow 0.3s;
+}
+.shutter:hover{ box-shadow: var(--shadow-sakura); animation-duration: 6s; }
+.shutter::before{
+  content:''; position:absolute; inset:14px; border-radius:50%; border:1px solid var(--cyan); opacity:0.6;
+}
+.shutter::after{
+  content:''; position:absolute; inset:34px; border-radius:50%; background: var(--sakura); box-shadow: var(--shadow-sakura);
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce){ .shutter{ animation:none; } }
+.shutter-label{
+  margin-top:14px; font-family: var(--font-mono); font-size:0.68rem; letter-spacing:0.18em;
+  text-transform:uppercase; color: var(--ink-muted);
+}
+
+/* ---------- section shell ---------- */
+.section{ padding: 110px clamp(20px,6vw,80px); max-width:1400px; margin:0 auto; }
+.section-head{ margin-bottom:44px; }
+.eyebrow{
+  font-family: var(--font-mono); font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase;
+  color: var(--cyan); margin:0 0 10px;
+}
+.section h2{
+  font-family: var(--font-display); font-weight:700; font-size: clamp(2rem,4vw,3rem); margin:0;
+}
+
+/* ---------- filter chips ---------- */
+.chips{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 36px; }
+.chip{
+  font-family: var(--font-mono); font-size:0.75rem; letter-spacing:0.05em;
+  padding:8px 16px; border-radius:999px; border:1px solid var(--line);
+  background: var(--panel); color: var(--ink-muted); transition: all 0.2s;
+}
+.chip:hover{ color: var(--ink); border-color: var(--sakura); }
+.chip.active{
+  color: var(--void); background: var(--sakura); border-color: var(--sakura); box-shadow: var(--shadow-sakura);
+}
+
+/* ---------- gallery masonry ---------- */
+.gallery{ column-count:1; column-gap:18px; }
+@media (min-width:620px){ .gallery{ column-count:2; } }
+@media (min-width:1000px){ .gallery{ column-count:3; } }
+@media (min-width:1400px){ .gallery{ column-count:4; } }
+
+.frame{ break-inside: avoid; margin:0 0 18px; position:relative; }
+.frame-inner{
+  position:relative; overflow:hidden; border-radius:10px; background: var(--panel);
+  border:1px solid var(--line); cursor:pointer;
+}
+.frame-inner img{ width:100%; height:auto; transition: transform 0.5s ease; display:block; }
+.frame-inner:hover img{ transform: scale(1.045); }
+
+.bracket{
+  position:absolute; width:22px; height:22px; opacity:0; transition: opacity 0.25s, transform 0.25s; pointer-events:none;
+}
+.bracket.tl{ top:8px; left:8px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); transform: translate(6px,6px); }
+.bracket.tr{ top:8px; right:8px; border-top:2px solid var(--cyan); border-right:2px solid var(--cyan); transform: translate(-6px,6px); }
+.bracket.bl{ bottom:8px; left:8px; border-bottom:2px solid var(--cyan); border-left:2px solid var(--cyan); transform: translate(6px,-6px); }
+.bracket.br{ bottom:8px; right:8px; border-bottom:2px solid var(--cyan); border-right:2px solid var(--cyan); transform: translate(-6px,-6px); }
+.frame-inner:hover .bracket{ opacity:1; transform:translate(0,0); filter: drop-shadow(var(--shadow-cyan)); }
+
+.frame-caption{
+  position:absolute; left:0; right:0; bottom:0; padding:14px 16px 12px;
+  background: linear-gradient(to top, rgba(10,8,16,0.92), transparent);
+  display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+  transform: translateY(8px); opacity:0; transition: all 0.25s;
+}
+.frame-inner:hover .frame-caption{ transform: translateY(0); opacity:1; }
+.cap-title{ font-size:0.85rem; color: var(--ink); }
+.cap-cat{ font-size:0.65rem; color: var(--sakura-soft); letter-spacing:0.05em; white-space:nowrap; }
+
+.frame-edit{
+  display:flex; gap:6px; margin-top:8px; align-items:center;
+}
+.edit-input{
+  flex:1; background: var(--panel-2); border:1px solid var(--line); color: var(--ink);
+  font-size:0.78rem; padding:7px 9px; border-radius:6px; min-width:0;
+}
+.edit-input:focus{ border-color: var(--cyan); }
+.frame-delete{
+  flex-shrink:0; width:30px; height:30px; border-radius:6px; border:1px solid var(--line);
+  background: var(--panel-2); color: var(--ink-muted); font-size:1rem; line-height:1;
+}
+.frame-delete:hover{ color:#ff6b6b; border-color:#ff6b6b; }
+
+/* edit-only elements hidden unless body.is-editing */
+.edit-ui{ display:none; }
+body.is-editing .edit-ui{ display: revert; }
+body.is-editing .frame-edit{ display:flex; }
+
+/* ---------- empty state ---------- */
+.empty{
+  border:1px dashed var(--line); border-radius:14px; padding:64px 24px; text-align:center;
+  color: var(--ink-muted);
+}
+.empty h3{ font-family: var(--font-display); color: var(--ink); margin:0 0 8px; font-size:1.3rem; }
+.empty p{ margin:0 0 22px; font-size:0.9rem; }
+
+/* ---------- dropzone ---------- */
+.dropzone{
+  border:1.5px dashed var(--sakura); border-radius:14px; padding:38px 20px; text-align:center;
+  margin-bottom:28px; transition: all 0.2s; color: var(--ink-muted);
+}
+.dropzone p{ margin:4px 0; }
+.dropzone p:first-of-type{ color: var(--ink); font-size:0.95rem; }
+.dropzone .small{ font-size:0.78rem; }
+.dropzone.is-dragover{ border-color: var(--cyan); background: rgba(57,230,200,0.06); box-shadow: var(--shadow-cyan); }
+
+.text-link{
+  background:none; border:none; color: var(--ink-muted); font-size:0.78rem; text-decoration:underline;
+  text-decoration-color: var(--line); padding:0; margin-bottom:40px; display:inline-block;
+}
+.text-link:hover{ color: var(--sakura-soft); }
+
+.status-bar{
+  font-family: var(--font-mono); font-size:0.78rem; color: var(--cyan); min-height:1.4em; margin-bottom:12px;
+}
+
+/* ---------- about ---------- */
+.about-grid{ display:grid; grid-template-columns: 1fr; gap:40px; }
+@media (min-width:860px){ .about-grid{ grid-template-columns: 0.8fr 1.2fr; align-items:center; } }
+.about-portrait{
+  aspect-ratio:4/5; border-radius:14px; border:1px solid var(--line);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,79,176,0.25), transparent 60%),
+    radial-gradient(circle at 70% 80%, rgba(57,230,200,0.18), transparent 60%),
+    var(--panel);
+  display:flex; align-items:center; justify-content:center;
+  color: var(--ink-muted); font-family: var(--font-mono); font-size:0.78rem; text-align:center; padding:20px;
+}
+.about-bio{ color: var(--ink-muted); font-size:1.02rem; line-height:1.75; }
+.about-bio strong{ color: var(--ink); }
+.divider{ width:48px; height:2px; background: var(--sakura); margin: 22px 0; box-shadow: var(--shadow-sakura); }
+
+/* ---------- contact ---------- */
+.contact{ text-align:center; }
+.contact h2{ margin-bottom:14px; }
+.contact p{ color: var(--ink-muted); max-width:32em; margin:0 auto 32px; }
+.contact-links{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.tag-link{
+  font-family: var(--font-mono); font-size:0.8rem; padding:12px 22px; border-radius:999px;
+  border:1px solid var(--line); color: var(--ink); transition: all 0.2s;
+}
+.tag-link:hover{ border-color: var(--sakura); color: var(--sakura-soft); box-shadow: var(--shadow-sakura); }
+
+footer{ padding: 36px 20px 50px; text-align:center; color: var(--ink-muted); font-size:0.78rem; }
+
+/* ---------- lightbox ---------- */
+.lightbox{
+  position:fixed; inset:0; z-index:200; background: rgba(8,6,12,0.94);
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  padding: 60px 20px;
+}
+.lightbox[hidden]{ display:none; }
+.lightbox img{ max-height:72vh; max-width:90vw; object-fit:contain; border-radius:6px; box-shadow: 0 0 60px rgba(255,79,176,0.18); }
+.lb-caption{ margin-top:18px; text-align:center; }
+.lb-caption .cap-title{ font-size:1rem; }
+.lb-caption .mono{ color: var(--ink-muted); font-size:0.75rem; margin-top:6px; display:block; }
+.lb-close{
+  position:absolute; top:22px; right:28px; background:none; border:none; color: var(--ink); font-size:1.8rem; line-height:1;
+}
+.lb-close:hover{ color: var(--sakura-soft); }
+.lb-nav{
+  position:absolute; top:50%; transform: translateY(-50%); background:none; border:none; color: var(--ink);
+  font-size:2.2rem; padding:10px 16px; opacity:0.65;
+}
+.lb-nav:hover{ opacity:1; color: var(--cyan); }
+.lb-prev{ left:6px; } .lb-next{ right:6px; }
+
+/* ---------- passcode modal ---------- */
+.modal{ position:fixed; inset:0; z-index:300; background: rgba(8,6,12,0.7); display:flex; align-items:center; justify-content:center; padding:20px; }
+.modal[hidden]{ display:none; }
+.modal-box{
+  background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:30px; max-width:360px; width:100%;
+  box-shadow: 0 0 50px rgba(255,79,176,0.15);
+}
+.modal-box h3{ font-family: var(--font-display); margin:0 0 8px; font-size:1.2rem; }
+.muted{ color: var(--ink-muted); font-size:0.85rem; }
+.modal-box input{
+  width:100%; margin:16px 0 8px; padding:11px 13px; border-radius:8px; border:1px solid var(--line);
+  background: var(--panel-2); color: var(--ink); font-size:0.95rem;
+}
+.error{ color:#ff6b6b; font-size:0.8rem; margin:4px 0 0; }
+.error[hidden]{ display:none; }
+.modal-actions{ display:flex; gap:10px; margin-top:18px; }
+.btn{ flex:1; padding:11px 14px; border-radius:8px; border:1px solid var(--line); font-size:0.85rem; letter-spacing:0.03em; }
+.btn-ghost{ background:transparent; color: var(--ink-muted); }
+.btn-ghost:hover{ color: var(--ink); }
+.btn-primary{ background: var(--sakura); border-color: var(--sakura); color: var(--void); font-weight:600; }
+.btn-primary:hover{ box-shadow: var(--shadow-sakura); }
+.shake{ animation: shake 0.4s; }
+@keyframes shake{ 25%{ transform: translateX(-6px); } 75%{ transform: translateX(6px); } }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="grain"></div>
+<div class="petals" id="petals"></div>
+
+<header class="nav">
+  <div class="brand"><span class="brand-mark"></span><span id="brandName">YOUR NAME</span></div>
+  <nav class="nav-links">
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <button class="btn-edit" id="editToggleBtn" type="button" aria-label="Toggle edit mode">Edit</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="home">
+    <p class="hero-eyebrow">PHOTOGRAPHY PORTFOLIO</p>
+    <h1 id="heroName">YOUR NAME</h1>
+    <p class="tagline" id="heroTagline">Frames pulled from neon hours and quiet light.</p>
+    <a href="#gallery" class="shutter" aria-label="Scroll to gallery"></a>
+    <span class="shutter-label">View Gallery</span>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="section-head">
+      <p class="eyebrow">// Selected Work</p>
+      <h2>Gallery</h2>
+    </div>
+
+    <div class="status-bar" id="statusBar" aria-live="polite"></div>
+
+    <div class="dropzone edit-ui" id="dropzone" tabindex="0" role="button" aria-label="Upload photos">
+      <input type="file" id="fileInput" accept="image/*" multiple hidden />
+      <p>Drop photos here, or click to browse</p>
+      <p class="small">JPG or PNG — auto-optimized for fast, sharp web display.</p>
+    </div>
+    <button class="text-link edit-ui" id="clearAllBtn" type="button">Clear all photos</button>
+
+    <div class="chips" id="chips"></div>
+    <div class="gallery" id="galleryGrid"></div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="section-head">
+      <p class="eyebrow">// Behind the Lens</p>
+      <h2>About</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-portrait">YOUR<br>PHOTO</div>
+      <div>
+        <p class="about-bio" id="aboutBio">I'm a photographer drawn to the hours between day and night — neon signs, wet pavement, quiet portraits. This is a working archive of what I've shot lately, updated as I go.</p>
+        <div class="divider"></div>
+        <p class="about-bio">Based wherever the light is good. Available for shoots, collaborations, and prints.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" id="contact">
+    <p class="eyebrow">// Get In Touch</p>
+    <h2>Let's create something memorable</h2>
+    <p>Photography, collaborations, and creative conversations are always welcome.</p>
+    <div class="contact-links">
+      <a class="tag-link" id="emailLink" href="mailto:hello@yourdomain.com">EMAIL</a>
+      <a class="tag-link" id="instaLink" href="https://instagram.com" target="_blank" rel="noopener">INSTAGRAM</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span id="footerLine">© 2026 YOUR NAME. Built with light and patience.</span>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-close" id="lbClose" aria-label="Close">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous photo">‹</button>
+  <img id="lbImage" src="" alt="" />
+  <div class="lb-caption">
+    <div class="cap-title" id="lbTitle"></div>
+    <span class="mono" id="lbMeta"></span>
+  </div>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Next photo">›</button>
+</div>
+
+<!-- Passcode modal -->
+<div class="modal" id="passModal" hidden>
+  <div class="modal-box">
+    <h3>Editor access</h3>
+    <p class="muted">Enter the passcode to add or manage photos.</p>
+    <input type="password" id="passInput" autocomplete="off" placeholder="Passcode" />
+    <p class="error" id="passError" hidden>That's not it — try again.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="passCancel" type="button">Cancel</button>
+      <button class="btn btn-primary" id="passSubmit" type="button">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — edit these to make the site yours
+   ============================================================ */
+const CONFIG = {
+  siteName: "Minit",
+  tagline: "Student • Mobile Photographer • Android ROM Enthusiast",
+  aboutBio: "Hi, I'm Minit — a student with a passion for mobile photography and Android development. Through MClicks, I share moments captured from everyday life, focusing on minimal compositions, light, and emotion. Alongside photography, I enjoy learning about custom ROM development and open-source Android projects.",
+  email: "your@email.com",
+  instagram: "https://instagram.com/",
+  // Anyone who knows this can enter Edit Mode and add/remove photos.
+  // This is a friendly speed bump, NOT real security — change it to
+  // something only you know, but don't rely on it to protect private content.
+  editPasscode: "sakura2026"
+};
+
+document.getElementById('brandName').textContent = CONFIG.siteName;
+document.getElementById('heroName').textContent = CONFIG.siteName;
+document.getElementById('heroTagline').textContent = CONFIG.tagline;
+document.getElementById('aboutBio').textContent = CONFIG.aboutBio;
+document.getElementById('emailLink').href = 'mailto:' + CONFIG.email;
+document.getElementById('instaLink').href = CONFIG.instagram;
+document.getElementById('footerLine').textContent = '© ' + new Date().getFullYear() + ' ' + CONFIG.siteName + '. Built with light and patience.';
+document.title = CONFIG.siteName + ' — Photography';
+
+/* ============================================================
+   Ambient sakura petals
+   ============================================================ */
+(function initPetals(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wrap = document.getElementById('petals');
+  const count = reduceMotion ? 6 : 16;
+  for (let i=0;i<count;i++){
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const size = 6 + Math.random()*10;
+    p.style.width = size+'px';
+    p.style.height = size+'px';
+    p.style.left = Math.random()*100+'vw';
+    p.style.animationDuration = (10 + Math.random()*14)+'s';
+    p.style.animationDelay = (Math.random()*-20)+'s';
+    wrap.appendChild(p);
+  }
+})();
+
+/* ============================================================
+   State + storage helpers
+   ============================================================ */
+const state = { photos: [], filter: 'All', visible: [], lbIndex: 0 };
+
+function setStatus(msg){ document.getElementById('statusBar').textContent = msg || ''; }
+
+function escapeHtml(str){
+  return String(str || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function getIndex(){
+  try{
+    const res = await window.storage.get('gallery-index', true);
+    return res ? JSON.parse(res.value) : [];
+  }catch(e){ return []; }
+}
+async function setIndex(arr){
+  return window.storage.set('gallery-index', JSON.stringify(arr), true);
+}
+async function savePhoto(photo){
+  return window.storage.set('photo:'+photo.id, JSON.stringify(photo), true);
+}
+async function deleteStoredPhoto(id){
+  try{ await window.storage.delete('photo:'+id, true); }catch(e){}
+}
+
+function generateId(){
+  return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8);
+}
+function prettifyFilename(name){
+  const base = name.replace(/\.[^/.]+$/, '');
+  const spaced = base.replace(/[-_]+/g, ' ').trim();
+  const titled = spaced.replace(/\b\w/g, c => c.toUpperCase());
+  return titled || 'Untitled';
+}
+
+/* ============================================================
+   Image compression (resize + recompress to fit storage limits)
+   ============================================================ */
+function compressImage(file){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('read failed'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('decode failed'));
+      img.onload = () => {
+        let { width, height } = img;
+        const maxDim = 2000;
+        if (width > maxDim || height > maxDim){
+          if (width > height){ height = Math.round(height*maxDim/width); width = maxDim; }
+          else { width = Math.round(width*maxDim/height); height = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const targetBytes = 1.4*1024*1024;
+        const approxBytes = (url) => Math.round((url.length - url.indexOf(',') - 1) * 3/4);
+
+        let quality = 0.85;
+        let dataUrl = canvas.toDataURL('image/jpeg', quality);
+        while (approxBytes(dataUrl) > targetBytes && quality > 0.5){
+          quality -= 0.07;
+          dataUrl = canvas.toDataURL('image/jpeg', quality);
+        }
+        if (approxBytes(dataUrl) > targetBytes){
+          const scale = Math.sqrt(targetBytes/approxBytes(dataUrl));
+          const w2 = Math.max(500, Math.round(width*scale));
+          const h2 = Math.max(350, Math.round(height*scale));
+          canvas.width = w2; canvas.height = h2;
+          ctx.drawImage(img, 0, 0, w2, h2);
+          dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        }
+        resolve(dataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ============================================================
+   Load gallery on start
+   ============================================================ */
+async function loadGallery(){
+  setStatus('Loading gallery…');
+  const idx = await getIndex();
+  const results = await Promise.allSettled(idx.map(id => window.storage.get('photo:'+id, true)));
+  const photos = [];
+  results.forEach(r => {
+    if (r.status === 'fulfilled' && r.value){
+      try{ photos.push(JSON.parse(r.value.value)); }catch(e){}
+    }
+  });
+  state.photos = photos;
+  setStatus('');
+  renderGallery();
+}
+
+/* ============================================================
+   Rendering
+   ============================================================ */
+function renderChips(){
+  const cats = ['All', ...new Set(state.photos.map(p => p.category || 'Uncategorized'))];
+  const chips = document.getElementById('chips');
+  chips.innerHTML = cats.map(c =>
+    `<button class="chip ${c===state.filter?'active':''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`
+  ).join('');
+}
+
+function renderGallery(){
+  renderChips();
+  const grid = document.getElementById('galleryGrid');
+  const filtered = state.filter === 'All'
+    ? state.photos
+    : state.photos.filter(p => (p.category||'Uncategorized') === state.filter);
+  state.visible = filtered;
+
+  if (state.photos.length === 0){
+    grid.innerHTML = `<div class="empty" style="column-span:all;">
+      <h3>No shots yet</h3>
+      <p>Open Edit Mode above to upload your first photo.</p>
+    </div>`;
+    return;
+  }
+  if (filtered.length === 0){
+    grid.innerHTML = `<div class="empty" style="column-span:all;">
+      <h3>Nothing in "${escapeHtml(state.filter)}" yet</h3>
+      <p>Try another category, or add a photo with this tag.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => `
+    <figure class="frame" data-id="${escapeHtml(p.id)}">
+      <div class="frame-inner" data-open="${i}">
+        <img src="${p.dataUrl}" alt="${escapeHtml(p.title)}" loading="lazy" />
+        <span class="bracket tl"></span><span class="bracket tr"></span><span class="bracket bl"></span><span class="bracket br"></span>
+        <figcaption class="frame-caption">
+          <span class="cap-title">${escapeHtml(p.title)}</span>
+          <span class="cap-cat mono">${escapeHtml(p.category || 'Uncategorized')}</span>
+        </figcaption>
+      </div>
+      <div class="frame-edit edit-ui">
+        <input class="edit-input" data-field="title" data-id="${escapeHtml(p.id)}" value="${escapeHtml(p.title)}" aria-label="Title" />
+        <input class="edit-input" data-field="category" data-id="${escapeHtml(p.id)}" value="${escapeHtml(p.category||'')}" aria-label="Category" placeholder="Category" />
+        <button class="frame-delete" data-id="${escapeHtml(p.id)}" aria-label="Delete photo" type="button">×</button>
+      </div>
+    </figure>
+  `).join('');
+}
+
+/* ============================================================
+   Adding photos
+   ============================================================ */
+async function ingestFiles(fileList){
+  const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+  if (!files.length) return;
+  for (const file of files){
+    setStatus(`Adding ${file.name}…`);
+    try{
+      const dataUrl = await compressImage(file);
+      const photo = { id: generateId(), title: prettifyFilename(file.name), category: 'Uncategorized', dataUrl, ts: Date.now() };
+      await savePhoto(photo);
+      const idx = await getIndex();
+      idx.unshift(photo.id);
+      await setIndex(idx);
+      state.photos.unshift(photo);
+      renderGallery();
+    }catch(e){
+      console.error(e);
+      setStatus(`Couldn't add ${file.name} — try a different file.`);
+    }
+  }
+  setStatus('');
+}
+
+/* ============================================================
+   Editing / deleting
+   ============================================================ */
+async function updatePhotoField(id, field, value){
+  const photo = state.photos.find(p => p.id === id);
+  if (!photo) return;
+  photo[field] = value;
+  try{ await savePhoto(photo); }
+  catch(e){ setStatus('Could not save changes.'); }
+}
+
+async function deletePhotoById(id){
+  if (!confirm("Delete this photo? This can't be undone.")) return;
+  state.photos = state.photos.filter(p => p.id !== id);
+  renderGallery();
+  try{
+    const idx = await getIndex();
+    await setIndex(idx.filter(x => x !== id));
+    await deleteStoredPhoto(id);
+  }catch(e){ setStatus('Could not delete — try again.'); }
+}
+
+async function clearAllPhotos(){
+  if (!confirm('Delete ALL photos from this gallery? This cannot be undone.')) return;
+  const idx = await getIndex();
+  setStatus('Clearing gallery…');
+  for (const id of idx){ await deleteStoredPhoto(id); }
+  await setIndex([]);
+  state.photos = [];
+  state.filter = 'All';
+  setStatus('');
+  renderGallery();
+}
+
+/* ============================================================
+   Edit mode + passcode
+   ============================================================ */
+const editToggleBtn = document.getElementById('editToggleBtn');
+const passModal = document.getElementById('passModal');
+const passInput = document.getElementById('passInput');
+const passError = document.getElementById('passError');
+
+function enterEditMode(){
+  document.body.classList.add('is-editing');
+  editToggleBtn.textContent = 'Done';
+  renderGallery();
+}
+function exitEditMode(){
+  document.body.classList.remove('is-editing');
+  editToggleBtn.textContent = 'Edit';
+  renderGallery();
+}
+function openPassModal(){
+  passModal.hidden = false;
+  passError.hidden = true;
+  passInput.value = '';
+  passInput.focus();
+}
+function closePassModal(){ passModal.hidden = true; }
+function submitPasscode(){
+  if (passInput.value === CONFIG.editPasscode){
+    closePassModal();
+    enterEditMode();
+  } else {
+    passError.hidden = false;
+    const box = passModal.querySelector('.modal-box');
+    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+  }
+}
+
+editToggleBtn.addEventListener('click', () => {
+  if (document.body.classList.contains('is-editing')) exitEditMode();
+  else openPassModal();
+});
+document.getElementById('passCancel').addEventListener('click', closePassModal);
+document.getElementById('passSubmit').addEventListener('click', submitPasscode);
+passInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitPasscode(); });
+
+/* ============================================================
+   Dropzone
+   ============================================================ */
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+fileInput.addEventListener('change', () => { ingestFiles(fileInput.files); fileInput.value = ''; });
+['dragover','dragenter'].forEach(ev => dropzone.addEventListener(ev, (e) => {
+  e.preventDefault(); dropzone.classList.add('is-dragover');
+}));
+['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, (e) => {
+  e.preventDefault(); dropzone.classList.remove('is-dragover');
+}));
+dropzone.addEventListener('drop', (e) => { ingestFiles(e.dataTransfer.files); });
+
+document.getElementById('clearAllBtn').addEventListener('click', clearAllPhotos);
+
+/* ============================================================
+   Gallery interactions (delegated)
+   ============================================================ */
+const galleryGrid = document.getElementById('galleryGrid');
+const chips = document.getElementById('chips');
+
+chips.addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  state.filter = chip.dataset.cat;
+  renderGallery();
+});
+
+galleryGrid.addEventListener('click', (e) => {
+  const delBtn = e.target.closest('.frame-delete');
+  if (delBtn){ deletePhotoById(delBtn.dataset.id); return; }
+  if (e.target.closest('.edit-input')) return;
+  const inner = e.target.closest('.frame-inner');
+  if (inner){ openLightbox(Number(inner.dataset.open)); }
+});
+
+galleryGrid.addEventListener('focusout', (e) => {
+  const input = e.target.closest('.edit-input');
+  if (!input) return;
+  updatePhotoField(input.dataset.id, input.dataset.field, input.value);
+});
+
+/* ============================================================
+   Lightbox
+   ============================================================ */
+const lightbox = document.getElementById('lightbox');
+const lbImage = document.getElementById('lbImage');
+const lbTitle = document.getElementById('lbTitle');
+const lbMeta = document.getElementById('lbMeta');
+
+function openLightbox(i){
+  state.lbIndex = i;
+  renderLightbox();
+  lightbox.hidden = false;
+}
+function renderLightbox(){
+  const p = state.visible[state.lbIndex];
+  if (!p) return;
+  lbImage.src = p.dataUrl;
+  lbImage.alt = p.title;
+  lbTitle.textContent = p.title;
+  lbMeta.textContent = `${p.category || 'Uncategorized'} · ${state.lbIndex+1} / ${state.visible.length}`;
+}
+function closeLightbox(){ lightbox.hidden = true; }
+function lbNext(){ state.lbIndex = (state.lbIndex+1) % state.visible.length; renderLightbox(); }
+function lbPrev(){ state.lbIndex = (state.lbIndex-1+state.visible.length) % state.visible.length; renderLightbox(); }
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbNext').addEventListener('click', lbNext);
+document.getElementById('lbPrev').addEventListener('click', lbPrev);
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', (e) => {
+  if (lightbox.hidden) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowRight') lbNext();
+  if (e.key === 'ArrowLeft') lbPrev();
+});
+
+/* ============================================================
+   Init
+   ============================================================ */
+loadGallery();
+</script>
+</body>
+</html>
