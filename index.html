@@ -1,846 +1,1620 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="color-scheme" content="dark" />
-<title>Photography Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Minit — Photographer & AOSP Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-/* ============================================================
-   CUSTOMIZE ME: see the CONFIG object near the top of the
-   <script> at the bottom of this file for your name, bio,
-   contact links, and the edit-mode passcode.
-   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --void: #0a0810;
-  --panel: #161025;
-  --panel-2: #1f1730;
-  --sakura: #ff4fb0;
-  --sakura-soft: #ff9bd6;
-  --cyan: #39e6c8;
-  --ink: #f3edf6;
-  --ink-muted: #9089a3;
-  --line: rgba(255,79,176,0.18);
-  --shadow-sakura: 0 0 24px rgba(255,79,176,0.45);
-  --shadow-cyan: 0 0 18px rgba(57,230,200,0.45);
-  --font-display: 'Unbounded', sans-serif;
-  --font-body: 'Sora', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --bg:       #05020a;
+  --bg2:      #0a0414;
+  --bg3:      #0f0619;
+  --rose:     #ff2d6b;
+  --pink:     #ff6eb4;
+  --purple:   #c026d3;
+  --violet:   #7c3aed;
+  --magenta:  #e879f9;
+  --deep:     #4a0040;
+  --white:    #f8f0ff;
+  --dim:      #7c6a8a;
+  --border:   rgba(255,45,107,0.15);
+  --grose:    rgba(255,45,107,0.08);
+  --gpink:    rgba(255,110,180,0.08);
+  --gpur:     rgba(192,38,211,0.08);
 }
 
-*{ box-sizing: border-box; }
-html{ scroll-behavior: smooth; }
+html{scroll-behavior:smooth}
 body{
-  margin:0;
-  background: var(--void);
-  color: var(--ink);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Inter',sans-serif;
+  font-size:15px;line-height:1.7;
+  overflow-x:hidden;cursor:none;
 }
 
-::-webkit-scrollbar{ width:10px; }
-::-webkit-scrollbar-track{ background: var(--void); }
-::-webkit-scrollbar-thumb{ background: var(--panel-2); border-radius:6px; }
-::-webkit-scrollbar-thumb:hover{ background: var(--sakura); }
-
-a{ color: inherit; text-decoration:none; }
-img{ max-width:100%; display:block; }
-button{ font-family: var(--font-body); cursor:pointer; }
-input{ font-family: var(--font-body); }
-
-.mono{ font-family: var(--font-mono); }
-
-:focus-visible{
-  outline: 2px solid var(--cyan);
-  outline-offset: 3px;
-  border-radius: 4px;
+/* ═══ PARTICLE CANVAS (full bg) ════ */
+#particle-bg{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
 }
 
-/* ---------- ambient background layers ---------- */
-.bg-glow{
-  position: fixed; inset:0; z-index:0; pointer-events:none;
-  background:
-    radial-gradient(ellipse 60% 40% at 18% 12%, rgba(255,79,176,0.16), transparent 60%),
-    radial-gradient(ellipse 50% 35% at 85% 30%, rgba(57,230,200,0.10), transparent 60%),
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,79,176,0.10), transparent 60%);
+/* ═══ AURORA BLOBS ════════════════ */
+#aurora{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.ablob{
+  position:absolute;border-radius:50%;
+  filter:blur(70px);will-change:transform;
 }
-.grain{
-  position: fixed; inset:0; z-index:1; pointer-events:none; opacity:0.05; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+.ablob:nth-child(1){
+  width:620px;height:620px;
+  background:radial-gradient(circle,rgba(255,45,107,.18),transparent 70%);
+  top:-200px;left:-100px;
+  animation:ab1 20s ease-in-out infinite;
 }
-.petals{ position: fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
-.petal{
-  position:absolute; top:-5vh;
-  width:10px; height:10px;
-  background: radial-gradient(circle at 30% 30%, var(--sakura-soft), var(--sakura) 65%, transparent 100%);
-  border-radius: 0 60% 0 60%;
-  filter: blur(0.3px);
-  box-shadow: 0 0 8px rgba(255,79,176,0.7);
-  animation: drift linear infinite;
-  opacity:0.75;
+.ablob:nth-child(2){
+  width:520px;height:520px;
+  background:radial-gradient(circle,rgba(192,38,211,.16),transparent 70%);
+  top:20%;right:-150px;
+  animation:ab2 26s ease-in-out infinite;
 }
-@keyframes drift{
-  0%{ transform: translate(0,0) rotate(0deg); }
-  50%{ transform: translate(40px, 55vh) rotate(180deg); }
-  100%{ transform: translate(-10px, 115vh) rotate(360deg); }
+.ablob:nth-child(3){
+  width:440px;height:440px;
+  background:radial-gradient(circle,rgba(124,58,237,.14),transparent 70%);
+  bottom:10%;left:20%;
+  animation:ab3 32s ease-in-out infinite;
 }
-@media (prefers-reduced-motion: reduce){
-  .petal{ animation: none; opacity:0.3; }
-  html{ scroll-behavior:auto; }
+@keyframes ab1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-40px) scale(1.1)}66%{transform:translate(-30px,50px) scale(.95)}}
+@keyframes ab2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-50px,30px) scale(1.08)}66%{transform:translate(40px,-60px) scale(.97)}}
+@keyframes ab3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-40px) scale(1.05)}}
+
+/* ═══ CODE RAIN BG ════════════════ */
+#code-rain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.07}
+
+/* ═══ SCANLINES ═══════════════════ */
+#scanline{
+  position:fixed;inset:0;z-index:9970;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px);
 }
 
-main, header, footer{ position: relative; z-index:2; }
+/* ═══ CURSOR ══════════════════════ */
+#cur{
+  width:10px;height:10px;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+}
+#cur-inner{
+  width:100%;height:100%;
+  background:var(--rose);
+  box-shadow:0 0 12px var(--rose),0 0 24px rgba(255,45,107,.5);
+  clip-path:polygon(0 0,100% 0,100% 60%,60% 60%,60% 100%,0 100%);
+}
+#cur-ring{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(255,45,107,.5);
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:width .25s,height .25s,border-color .2s;
+  box-shadow:0 0 20px rgba(255,45,107,.1);
+}
+body:has(a:hover) #cur-ring,body:has(button:hover) #cur-ring{
+  width:56px;height:56px;border-color:var(--pink);
+  box-shadow:0 0 30px rgba(255,110,180,.25);
+}
+#cur-trail{position:fixed;inset:0;pointer-events:none;z-index:9997}
 
-/* ---------- nav ---------- */
-.nav{
-  position: fixed; top:0; left:0; right:0; z-index:50;
-  display:flex; align-items:center; justify-content:space-between;
-  padding: 18px clamp(20px,5vw,56px);
-  background: rgba(10,8,16,0.55);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+/* ═══ NAV ═════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 2.5rem;
+  background:rgba(5,2,10,.65);
+  backdrop-filter:blur(18px) saturate(180%);
+  border-bottom:1px solid rgba(255,45,107,.08);
 }
-.brand{
-  display:flex; align-items:center; gap:10px;
-  font-family: var(--font-display); font-weight:700; letter-spacing:0.04em;
-  font-size: 1rem; color: var(--ink);
+nav::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--rose),var(--purple),var(--pink),transparent);
+  opacity:.3;animation:navGlow 4s ease-in-out infinite;
 }
-.brand-mark{
-  width:20px; height:20px; border-radius:50%;
-  border:2px solid var(--sakura);
-  box-shadow: var(--shadow-sakura);
+@keyframes navGlow{0%,100%{opacity:.3}50%{opacity:.6}}
+.nav-logo{
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;
+  color:var(--white);text-decoration:none;letter-spacing:.12em;
   position:relative;
 }
-.brand-mark::after{
-  content:''; position:absolute; inset:5px; border-radius:50%; background: var(--sakura);
-}
-.nav-links{ display:flex; align-items:center; gap: clamp(14px,2vw,32px); }
+.nav-logo .r{color:var(--rose);text-shadow:0 0 14px var(--rose)}
+.nav-logo .p{color:var(--magenta);text-shadow:0 0 14px var(--magenta)}
+.nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{
-  font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color: var(--ink-muted);
-  transition: color 0.2s;
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  color:var(--dim);text-decoration:none;letter-spacing:.1em;
+  transition:color .2s,text-shadow .2s;position:relative;padding-bottom:2px;
 }
-.nav-links a:hover{ color: var(--sakura-soft); }
-.btn-edit{
-  background:transparent; border:1px solid var(--line); color: var(--ink-muted);
-  font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase;
-  padding:7px 14px; border-radius:999px; transition: all 0.2s;
+.nav-links a::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--rose),var(--purple));
+  transform:scaleX(0);transform-origin:left;transition:transform .3s;
 }
-.btn-edit:hover{ border-color: var(--sakura); color: var(--sakura-soft); }
-body.is-editing .btn-edit{ border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 14px rgba(57,230,200,0.25); }
+.nav-links a:hover{color:var(--white);text-shadow:0 0 12px rgba(255,110,180,.4)}
+.nav-links a:hover::after{transform:scaleX(1)}
 
-/* ---------- hero ---------- */
-.hero{
-  min-height: 100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; padding: 140px 20px 80px; position:relative;
-}
-.hero-eyebrow{
-  font-family: var(--font-mono); font-size:0.72rem; letter-spacing:0.25em; text-transform:uppercase;
-  color: var(--cyan); margin-bottom:18px; opacity:0.9;
-}
-.hero h1{
-  font-family: var(--font-display); font-weight:800;
-  font-size: clamp(3rem, 11vw, 7.5rem); line-height:0.95; margin:0;
-  color: var(--ink);
-  text-shadow: 0 0 18px rgba(255,79,176,0.55), 0 0 50px rgba(255,79,176,0.25);
-  letter-spacing: -0.01em;
-}
-.hero p.tagline{
-  margin-top:22px; max-width: 36em; font-size: clamp(1rem,2vw,1.15rem);
-  color: var(--ink-muted); font-weight:300;
-}
-.shutter{
-  margin-top:48px; width:88px; height:88px; border-radius:50%;
-  border:1.5px dashed var(--sakura); display:flex; align-items:center; justify-content:center;
-  background: transparent; color: var(--sakura-soft); position:relative;
-  animation: spin 26s linear infinite;
-  transition: box-shadow 0.3s;
-}
-.shutter:hover{ box-shadow: var(--shadow-sakura); animation-duration: 6s; }
-.shutter::before{
-  content:''; position:absolute; inset:14px; border-radius:50%; border:1px solid var(--cyan); opacity:0.6;
-}
-.shutter::after{
-  content:''; position:absolute; inset:34px; border-radius:50%; background: var(--sakura); box-shadow: var(--shadow-sakura);
-}
-@keyframes spin{ to{ transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce){ .shutter{ animation:none; } }
-.shutter-label{
-  margin-top:14px; font-family: var(--font-mono); font-size:0.68rem; letter-spacing:0.18em;
-  text-transform:uppercase; color: var(--ink-muted);
+/* ═══ HERO ════════════════════════ */
+#hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  position:relative;overflow:hidden;
 }
 
-/* ---------- section shell ---------- */
-.section{ padding: 110px clamp(20px,6vw,80px); max-width:1400px; margin:0 auto; }
-.section-head{ margin-bottom:44px; }
-.eyebrow{
-  font-family: var(--font-mono); font-size:0.72rem; letter-spacing:0.22em; text-transform:uppercase;
-  color: var(--cyan); margin:0 0 10px;
+/* PHOTO SIDE */
+.hero-photo{
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:8rem 7rem 4rem 5rem;
+  position:relative;overflow:hidden;
+  border-right:1px solid rgba(255,45,107,.06);
 }
-.section h2{
-  font-family: var(--font-display); font-weight:700; font-size: clamp(2rem,4vw,3rem); margin:0;
+.hero-photo::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 25% 55%,rgba(255,45,107,.1) 0%,transparent 70%);
+  animation:pGlow 7s ease-in-out infinite;pointer-events:none;
 }
-
-/* ---------- filter chips ---------- */
-.chips{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 36px; }
-.chip{
-  font-family: var(--font-mono); font-size:0.75rem; letter-spacing:0.05em;
-  padding:8px 16px; border-radius:999px; border:1px solid var(--line);
-  background: var(--panel); color: var(--ink-muted); transition: all 0.2s;
+@keyframes pGlow{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.08)}}
+/* grain */
+.hero-photo::after{
+  content:'';position:absolute;inset:-20%;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+  background-size:180px 180px;opacity:.8;
+  animation:grain .9s steps(1) infinite;
+  will-change:transform;
 }
-.chip:hover{ color: var(--ink); border-color: var(--sakura); }
-.chip.active{
-  color: var(--void); background: var(--sakura); border-color: var(--sakura); box-shadow: var(--shadow-sakura);
-}
-
-/* ---------- gallery masonry ---------- */
-.gallery{ column-count:1; column-gap:18px; }
-@media (min-width:620px){ .gallery{ column-count:2; } }
-@media (min-width:1000px){ .gallery{ column-count:3; } }
-@media (min-width:1400px){ .gallery{ column-count:4; } }
-
-.frame{ break-inside: avoid; margin:0 0 18px; position:relative; }
-.frame-inner{
-  position:relative; overflow:hidden; border-radius:10px; background: var(--panel);
-  border:1px solid var(--line); cursor:pointer;
-}
-.frame-inner img{ width:100%; height:auto; transition: transform 0.5s ease; display:block; }
-.frame-inner:hover img{ transform: scale(1.045); }
-
-.bracket{
-  position:absolute; width:22px; height:22px; opacity:0; transition: opacity 0.25s, transform 0.25s; pointer-events:none;
-}
-.bracket.tl{ top:8px; left:8px; border-top:2px solid var(--cyan); border-left:2px solid var(--cyan); transform: translate(6px,6px); }
-.bracket.tr{ top:8px; right:8px; border-top:2px solid var(--cyan); border-right:2px solid var(--cyan); transform: translate(-6px,6px); }
-.bracket.bl{ bottom:8px; left:8px; border-bottom:2px solid var(--cyan); border-left:2px solid var(--cyan); transform: translate(6px,-6px); }
-.bracket.br{ bottom:8px; right:8px; border-bottom:2px solid var(--cyan); border-right:2px solid var(--cyan); transform: translate(-6px,-6px); }
-.frame-inner:hover .bracket{ opacity:1; transform:translate(0,0); filter: drop-shadow(var(--shadow-cyan)); }
-
-.frame-caption{
-  position:absolute; left:0; right:0; bottom:0; padding:14px 16px 12px;
-  background: linear-gradient(to top, rgba(10,8,16,0.92), transparent);
-  display:flex; justify-content:space-between; align-items:baseline; gap:10px;
-  transform: translateY(8px); opacity:0; transition: all 0.25s;
-}
-.frame-inner:hover .frame-caption{ transform: translateY(0); opacity:1; }
-.cap-title{ font-size:0.85rem; color: var(--ink); }
-.cap-cat{ font-size:0.65rem; color: var(--sakura-soft); letter-spacing:0.05em; white-space:nowrap; }
-
-.frame-edit{
-  display:flex; gap:6px; margin-top:8px; align-items:center;
-}
-.edit-input{
-  flex:1; background: var(--panel-2); border:1px solid var(--line); color: var(--ink);
-  font-size:0.78rem; padding:7px 9px; border-radius:6px; min-width:0;
-}
-.edit-input:focus{ border-color: var(--cyan); }
-.frame-delete{
-  flex-shrink:0; width:30px; height:30px; border-radius:6px; border:1px solid var(--line);
-  background: var(--panel-2); color: var(--ink-muted); font-size:1rem; line-height:1;
-}
-.frame-delete:hover{ color:#ff6b6b; border-color:#ff6b6b; }
-
-/* edit-only elements hidden unless body.is-editing */
-.edit-ui{ display:none; }
-body.is-editing .edit-ui{ display: revert; }
-body.is-editing .frame-edit{ display:flex; }
-
-/* ---------- empty state ---------- */
-.empty{
-  border:1px dashed var(--line); border-radius:14px; padding:64px 24px; text-align:center;
-  color: var(--ink-muted);
-}
-.empty h3{ font-family: var(--font-display); color: var(--ink); margin:0 0 8px; font-size:1.3rem; }
-.empty p{ margin:0 0 22px; font-size:0.9rem; }
-
-/* ---------- dropzone ---------- */
-.dropzone{
-  border:1.5px dashed var(--sakura); border-radius:14px; padding:38px 20px; text-align:center;
-  margin-bottom:28px; transition: all 0.2s; color: var(--ink-muted);
-}
-.dropzone p{ margin:4px 0; }
-.dropzone p:first-of-type{ color: var(--ink); font-size:0.95rem; }
-.dropzone .small{ font-size:0.78rem; }
-.dropzone.is-dragover{ border-color: var(--cyan); background: rgba(57,230,200,0.06); box-shadow: var(--shadow-cyan); }
-
-.text-link{
-  background:none; border:none; color: var(--ink-muted); font-size:0.78rem; text-decoration:underline;
-  text-decoration-color: var(--line); padding:0; margin-bottom:40px; display:inline-block;
-}
-.text-link:hover{ color: var(--sakura-soft); }
-
-.status-bar{
-  font-family: var(--font-mono); font-size:0.78rem; color: var(--cyan); min-height:1.4em; margin-bottom:12px;
+@keyframes grain{
+  0%{transform:translate(0,0)}20%{transform:translate(-45px,-20px)}
+  40%{transform:translate(25px,-55px)}60%{transform:translate(-15px,35px)}
+  80%{transform:translate(55px,10px)}
 }
 
-/* ---------- about ---------- */
-.about-grid{ display:grid; grid-template-columns: 1fr; gap:40px; }
-@media (min-width:860px){ .about-grid{ grid-template-columns: 0.8fr 1.2fr; align-items:center; } }
-.about-portrait{
-  aspect-ratio:4/5; border-radius:14px; border:1px solid var(--line);
+/* DEV SIDE */
+.hero-dev{
+  background:rgba(5,2,10,.8);
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  padding:8rem 5rem 4rem 7rem;
+  position:relative;overflow:hidden;
+}
+.hero-dev::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 75% 45%,rgba(192,38,211,.1) 0%,transparent 70%);
+  animation:dGlow 9s ease-in-out infinite;pointer-events:none;
+}
+@keyframes dGlow{0%,100%{opacity:1}50%{opacity:.4}}
+
+#code-rain-hero{
+  position:absolute;inset:0;pointer-events:none;
+  opacity:.13;z-index:0;
+}
+
+/* hero eyebrows */
+.h-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  letter-spacing:.25em;text-transform:uppercase;
+  margin-bottom:1.1rem;
+  display:flex;align-items:center;gap:.7rem;
+  opacity:0;animation:fadeUp .7s forwards;
+  position:relative;z-index:2;
+}
+.h-eyebrow.rose{color:var(--rose);animation-delay:.15s}
+.h-eyebrow.purple{color:var(--magenta);animation-delay:.25s}
+.h-eyebrow::before{content:'';width:18px;height:1px;background:currentColor;opacity:.6}
+
+/* hero headings */
+.h-photo-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(2rem,4.2vw,3.6rem);
+  line-height:1.18;color:var(--white);font-style:italic;
+  margin-bottom:.8rem;
+  opacity:0;animation:fadeUp .8s .3s forwards;
+  position:relative;z-index:2;
+}
+.h-photo-title em{
+  color:var(--pink);font-style:normal;
+  text-shadow:0 0 30px rgba(255,110,180,.6),0 0 60px rgba(255,110,180,.25);
+  animation:pinkGlow 3s ease-in-out infinite;
+}
+@keyframes pinkGlow{
+  0%,100%{text-shadow:0 0 28px rgba(255,110,180,.6),0 0 55px rgba(255,110,180,.2)}
+  50%{text-shadow:0 0 50px rgba(255,110,180,1),0 0 100px rgba(255,110,180,.4)}
+}
+
+.h-dev-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(1rem,2vw,1.65rem);
+  font-weight:700;color:var(--rose);line-height:1.55;
+  margin-bottom:.8rem;
+  text-shadow:0 0 22px rgba(255,45,107,.55),0 0 44px rgba(255,45,107,.2);
+  opacity:0;animation:fadeUp .8s .4s forwards;
+  position:relative;z-index:2;
+  animation-fill-mode:forwards;
+}
+.h-dev-title .blink{
+  display:inline-block;width:2px;height:.95em;
+  background:var(--rose);vertical-align:middle;margin-left:3px;
+  box-shadow:0 0 10px var(--rose);
+  animation:blink 1s step-end infinite;
+}
+
+.h-desc{
+  font-size:.82rem;line-height:1.9;
+  color:rgba(248,240,255,.55);max-width:300px;margin-bottom:2rem;
+  opacity:0;animation:fadeUp .7s forwards;
+  position:relative;z-index:2;
+}
+.h-desc.delay1{animation-delay:.48s}
+.h-desc.delay2{animation-delay:.58s}
+
+/* hero stats */
+.hero-stats{
+  display:flex;gap:2rem;margin-top:1rem;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .7s .95s forwards;
+  position:relative;z-index:2;
+}
+.stat-item{display:flex;flex-direction:column;gap:.15rem}
+.stat-num{
+  font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700;
+  background:linear-gradient(135deg,var(--rose),var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.52rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;
+}
+
+/* center name */
+.hero-center{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:10;text-align:center;pointer-events:none;
+  opacity:0;animation:fadeUp .9s .85s forwards;
+  padding:1.6rem 3.2rem;
+}
+.hero-center::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 75% 85% at 50% 50%,rgba(5,2,10,.97) 0%,rgba(5,2,10,.75) 55%,transparent 85%);
+  z-index:-1;
+}
+.center-name{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(2.8rem,5.5vw,4.5rem);
+  color:var(--white);line-height:1;letter-spacing:.05em;
+  position:relative;
+}
+.center-divider{
+  width:1px;height:56px;margin:.55rem auto;
+  background:linear-gradient(to bottom,var(--rose),var(--purple));
+  opacity:.6;
+}
+.center-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  color:var(--dim);letter-spacing:.22em;text-transform:uppercase;
+}
+
+/* scroll hint */
+.scroll-hint{
+  position:absolute;bottom:2rem;left:50%;
+  transform:translateX(-50%);z-index:10;
+  font-family:'JetBrains Mono',monospace;font-size:.54rem;
+  color:var(--dim);letter-spacing:.18em;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  animation:scrollBounce 2.4s ease-in-out infinite;
+}
+.scroll-hint::after{
+  content:'';width:1px;height:44px;
+  background:linear-gradient(to bottom,var(--rose),transparent);
+}
+@keyframes scrollBounce{
+  0%,100%{transform:translateX(-50%) translateY(0);opacity:.5}
+  50%{transform:translateX(-50%) translateY(8px);opacity:1}
+}
+
+/* BUTTONS */
+.btn-rose{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  padding:.78rem 1.6rem;letter-spacing:.07em;font-weight:700;
+  background:linear-gradient(135deg,var(--rose),var(--purple));
+  color:var(--white);border:none;cursor:none;text-decoration:none;
+  display:inline-block;position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:0 4px 22px rgba(255,45,107,.35);
+  opacity:0;animation:fadeUp .7s forwards;
+}
+.btn-rose.d1{animation-delay:.65s}
+.btn-rose::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.18),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.btn-rose:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(255,45,107,.55)}
+.btn-rose:hover::before{opacity:1}
+
+.btn-ghost-rose{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  padding:.78rem 1.6rem;letter-spacing:.07em;
+  background:rgba(255,45,107,.06);
+  backdrop-filter:blur(10px);
+  color:var(--pink);border:1px solid rgba(255,45,107,.3);
+  cursor:none;text-decoration:none;display:inline-block;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  transition:transform .15s,background .2s,border-color .2s,box-shadow .2s;
+  opacity:0;animation:fadeUp .7s .78s forwards;
+  position:relative;z-index:2;
+}
+.btn-ghost-rose:hover{
+  background:rgba(255,45,107,.12);border-color:var(--rose);
+  transform:translateY(-3px);box-shadow:0 6px 26px rgba(255,45,107,.2);
+}
+
+/* ═══ SECTIONS ════════════════════ */
+main{position:relative;z-index:3}
+.sec{padding:6rem 2.5rem;max-width:1000px;margin:0 auto;position:relative}
+.sec-hr{
+  border:none;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,45,107,.12),rgba(192,38,211,.12),transparent);
+}
+
+/* section label */
+.sec-eye{
+  font-family:'JetBrains Mono',monospace;font-size:.57rem;
+  letter-spacing:.28em;text-transform:uppercase;
+  margin-bottom:.7rem;
+  display:flex;align-items:center;gap:.7rem;
+}
+.sec-eye.rose{color:var(--rose)}
+.sec-eye.purple{color:var(--magenta)}
+.sec-eye::before{
+  content:'';width:18px;height:1px;
+  background:linear-gradient(90deg,currentColor,transparent);
+}
+.sec-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(1.6rem,3vw,2.6rem);
+  font-style:italic;color:var(--white);margin-bottom:2.8rem;line-height:1.25;
+}
+.sec-title .rose{
+  color:var(--pink);
+  text-shadow:0 0 24px rgba(255,110,180,.5);
+}
+.sec-title .pur{
+  color:var(--magenta);
+  text-shadow:0 0 24px rgba(232,121,249,.4);
+}
+
+/* ═══ PHOTOGRAPHY ═════════════════ */
+#photography{background:var(--bg)}
+
+/* floating code snippet decorations */
+.code-deco{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  color:rgba(255,45,107,.2);line-height:1.8;
+  position:absolute;right:0;top:2rem;
+  text-align:right;pointer-events:none;
+  animation:codeFade 6s ease-in-out infinite;
+}
+@keyframes codeFade{0%,100%{opacity:.3}50%{opacity:.7}}
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:.6rem;
+}
+.pcard{
+  background:var(--bg3);
+  border:1px solid rgba(255,45,107,.08);
+  position:relative;overflow:hidden;cursor:none;
+  transition:transform .35s cubic-bezier(.25,.46,.45,.94),border-color .3s,box-shadow .3s;
+}
+.pcard::before{
+  content:'';position:absolute;inset:0;z-index:2;
+  background:linear-gradient(to top,rgba(5,2,10,.75) 0%,transparent 55%);
+}
+.pcard::after{
+  content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(135deg,rgba(255,45,107,.05),rgba(192,38,211,.05));
+  opacity:0;transition:opacity .3s;
+}
+.pcard:hover{
+  border-color:rgba(255,110,180,.35);
+  transform:scale(1.018) translateZ(0);
+  box-shadow:0 0 40px rgba(255,45,107,.12);
+}
+.pcard:hover::after{opacity:1}
+/* shimmer bar on hover */
+.pcard .shimmer{
+  position:absolute;top:0;left:0;right:0;height:2px;z-index:3;
+  background:linear-gradient(90deg,var(--rose),var(--pink),var(--purple),var(--rose));
+  background-size:300% 100%;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s;
+  animation:shimBar 2s linear infinite paused;
+}
+.pcard:hover .shimmer{transform:scaleX(1);animation-play-state:running}
+@keyframes shimBar{0%{background-position:0% 0}100%{background-position:300% 0}}
+
+.pcard:nth-child(1){grid-column:1;grid-row:1/3;min-height:440px}
+.pcard:nth-child(2),.pcard:nth-child(3){min-height:205px}
+.pcard:nth-child(4),.pcard:nth-child(5){min-height:215px}
+
+.pbg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.pbg svg{width:55%;height:55%;opacity:.5}
+
+/* different gradient moods */
+.pcard:nth-child(1) .pbg{background:linear-gradient(150deg,#14030f 0%,#2a0520 50%,#0a0214 100%)}
+.pcard:nth-child(2) .pbg{background:linear-gradient(140deg,#0a0210 0%,#1a0430 60%,#0d0218 100%)}
+.pcard:nth-child(3) .pbg{background:linear-gradient(130deg,#120210 0%,#220430 70%,#14021a 100%)}
+.pcard:nth-child(4) .pbg{background:linear-gradient(120deg,#08020e 0%,#180326 60%,#0f0218 100%)}
+.pcard:nth-child(5) .pbg{background:linear-gradient(160deg,#100212 0%,#200428 60%,#0c0214 100%)}
+
+.plabel{
+  position:absolute;bottom:.9rem;left:1rem;z-index:4;
+  font-family:'DM Serif Display',serif;font-size:.8rem;font-style:italic;
+  color:var(--white);opacity:.85;
+}
+.ptag{
+  position:absolute;top:.7rem;right:.7rem;z-index:4;
+  font-family:'JetBrains Mono',monospace;font-size:.5rem;
+  color:var(--pink);letter-spacing:.1em;
+  background:rgba(5,2,10,.6);padding:.2rem .45rem;
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,110,180,.15);
+}
+
+.photo-quote{
+  margin:3rem 0 0;padding:2rem 2.5rem;
+  border-left:2px solid var(--rose);
+  background:rgba(255,45,107,.04);
+  backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;
+}
+.photo-quote::before{
+  content:'"';
+  position:absolute;top:-1rem;left:1rem;
+  font-family:'DM Serif Display',serif;font-size:8rem;
+  color:rgba(255,45,107,.06);line-height:1;
+  pointer-events:none;
+}
+.photo-quote p{
+  font-family:'DM Serif Display',serif;font-size:1.15rem;font-style:italic;
+  color:rgba(248,240,255,.72);line-height:1.75;
+}
+.photo-quote cite{
+  display:block;margin-top:.8rem;
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  color:var(--rose);letter-spacing:.12em;font-style:normal;
+}
+
+/* ═══ DEVELOPMENT ═════════════════ */
+#development{
+  background:linear-gradient(to bottom,var(--bg),var(--bg2));
+  position:relative;overflow:hidden;
+}
+/* full-section floating code bg */
+.sec-code-bg{
+  position:absolute;inset:0;pointer-events:none;
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;
+  line-height:1.9;color:rgba(192,38,211,.08);
+  overflow:hidden;white-space:pre;
+  padding:6rem 2.5rem;
+  animation:codeScroll 40s linear infinite;
+}
+@keyframes codeScroll{from{background-position:0 0}to{transform:translateY(-50%)}}
+
+/* terminal */
+.terminal{
+  background:rgba(5,2,10,.9);
+  border:1px solid rgba(255,45,107,.15);
+  overflow:hidden;margin-bottom:2rem;
+  box-shadow:0 0 0 1px rgba(192,38,211,.05),
+             0 20px 60px rgba(0,0,0,.7),
+             0 0 60px rgba(255,45,107,.04);
+  position:relative;
+}
+.terminal::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--rose),var(--purple),var(--pink));
+  animation:termGlow 3s ease-in-out infinite;
+}
+@keyframes termGlow{
+  0%,100%{box-shadow:none}
+  50%{box-shadow:0 0 20px rgba(255,45,107,.5)}
+}
+.term-bar{
+  background:rgba(20,5,20,.9);
+  padding:.55rem 1rem;
+  display:flex;align-items:center;gap:.5rem;
+  border-bottom:1px solid rgba(255,45,107,.08);
+}
+.tdot{width:10px;height:10px;border-radius:50%}
+.tdot:nth-child(1){background:#ff5f57}
+.tdot:nth-child(2){background:#febc2e}
+.tdot:nth-child(3){background:#28c840}
+.term-label{
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;
+  color:rgba(255,45,107,.35);margin-left:.8rem;letter-spacing:.08em;
+}
+.term-body{
+  padding:1.4rem 1.5rem;
+  font-family:'JetBrains Mono',monospace;font-size:.73rem;
+  line-height:2;
+}
+.tl{display:block}
+.tp{color:rgba(255,45,107,.35)}
+.tc{color:rgba(248,240,255,.85)}
+.to{color:rgba(192,38,211,.55);padding-left:1.2rem}
+.th{color:var(--rose);font-weight:700}
+.tm{color:var(--magenta)}
+.tw{color:rgba(248,240,255,.6)}
+.tb{
+  display:inline-block;width:7px;height:.85em;
+  background:var(--rose);vertical-align:middle;
+  box-shadow:0 0 8px var(--rose);
+  animation:blink 1s step-end infinite;
+}
+
+/* currently maintaining badge */
+.device-badge{
+  display:inline-flex;align-items:center;gap:1rem;
+  padding:1rem 1.5rem;margin-bottom:2rem;
+  background:rgba(255,45,107,.05);
+  border:1px solid rgba(255,45,107,.2);
+  border-left:3px solid var(--rose);
+  backdrop-filter:blur(12px);
+  position:relative;overflow:hidden;
+}
+.device-badge::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(255,45,107,.04),transparent);
+}
+.device-badge-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--rose);
+  box-shadow:0 0 12px var(--rose);
+  animation:dotPulse 1.5s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 6px var(--rose)}50%{box-shadow:0 0 20px var(--rose),0 0 40px rgba(255,45,107,.3)}}
+.device-badge-text{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  color:var(--dim);line-height:1.5;
+}
+.device-badge-text strong{color:var(--white)}
+.device-badge-text .device-name{
+  color:var(--pink);
+  text-shadow:0 0 12px rgba(255,110,180,.4);
+}
+
+/* device showcase — photo + info, color-treated to match the rest of the site */
+.device-showcase{
+  display:grid;grid-template-columns:300px 1fr;gap:1.8rem;
+  align-items:center;margin-bottom:2rem;
+}
+.device-art{
+  position:relative;aspect-ratio:16/9;
+}
+.device-art-glow{
+  position:absolute;inset:-18%;z-index:0;
+  background:radial-gradient(circle at 50% 40%,rgba(255,45,107,.22),transparent 65%);
+  pointer-events:none;
+}
+.device-art-frame{
+  position:relative;z-index:1;width:100%;height:100%;
+  background:var(--bg3);
+  border:1px solid rgba(255,45,107,.15);
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
+  overflow:hidden;
+}
+.device-photo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;
+  filter:grayscale(.55) contrast(1.15) brightness(.72) saturate(1.3);
+}
+.device-photo-tint{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,45,107,.45),rgba(124,58,237,.5));
+  mix-blend-mode:color;
+}
+.device-photo-vignette{
+  position:absolute;inset:0;
   background:
-    radial-gradient(circle at 30% 20%, rgba(255,79,176,0.25), transparent 60%),
-    radial-gradient(circle at 70% 80%, rgba(57,230,200,0.18), transparent 60%),
-    var(--panel);
-  display:flex; align-items:center; justify-content:center;
-  color: var(--ink-muted); font-family: var(--font-mono); font-size:0.78rem; text-align:center; padding:20px;
+    linear-gradient(to top,rgba(5,2,10,.85) 0%,transparent 55%),
+    radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(5,2,10,.6) 100%);
 }
-.about-bio{ color: var(--ink-muted); font-size:1.02rem; line-height:1.75; }
-.about-bio strong{ color: var(--ink); }
-.divider{ width:48px; height:2px; background: var(--sakura); margin: 22px 0; box-shadow: var(--shadow-sakura); }
+.device-art-tag{
+  position:absolute;bottom:.7rem;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:.5rem;
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;
+  letter-spacing:.1em;color:var(--pink);
+  background:rgba(5,2,10,.7);padding:.3rem .6rem;
+  border:1px solid rgba(255,110,180,.2);
+  backdrop-filter:blur(6px);z-index:2;
+}
+.device-info{display:flex;flex-direction:column;gap:1rem}
+.device-specs{display:flex;flex-wrap:wrap;gap:.4rem}
 
-/* ---------- contact ---------- */
-.contact{ text-align:center; }
-.contact h2{ margin-bottom:14px; }
-.contact p{ color: var(--ink-muted); max-width:32em; margin:0 auto 32px; }
-.contact-links{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-.tag-link{
-  font-family: var(--font-mono); font-size:0.8rem; padding:12px 22px; border-radius:999px;
-  border:1px solid var(--line); color: var(--ink); transition: all 0.2s;
+/* rom cards */
+.rom-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.rom-card{
+  background:rgba(10,4,20,.7);
+  border:1px solid rgba(255,45,107,.09);
+  padding:1.6rem;position:relative;overflow:hidden;cursor:none;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+  transition:border-color .3s,transform .25s cubic-bezier(.25,.46,.45,.94),box-shadow .3s;
 }
-.tag-link:hover{ border-color: var(--sakura); color: var(--sakura-soft); box-shadow: var(--shadow-sakura); }
+.rom-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--rose),var(--purple));
+  opacity:0;transition:opacity .3s;
+}
+.rom-card::after{
+  content:'';position:absolute;bottom:-80px;right:-60px;
+  width:160px;height:160px;
+  background:radial-gradient(circle,rgba(255,45,107,.06),transparent 70%);
+  pointer-events:none;
+}
+.rom-card:hover{
+  border-color:rgba(255,45,107,.3);
+  transform:translateY(-5px);
+  box-shadow:0 14px 50px rgba(0,0,0,.6),0 0 30px rgba(255,45,107,.07);
+}
+.rom-card:hover::before{opacity:1}
+/* glow spotlight */
+.rom-card:hover{
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,45,107,.08) 0%,rgba(10,4,20,.7) 60%);
+}
+.rom-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  color:var(--rose);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;
+}
+.rom-tag::before{content:'>';color:rgba(255,45,107,.4)}
+.rom-title{
+  font-family:'JetBrains Mono',monospace;font-size:.88rem;
+  font-weight:700;color:var(--white);margin-bottom:.7rem;
+}
+.rom-desc{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:rgba(192,38,211,.55);line-height:1.85;margin-bottom:1.2rem;
+}
+.rom-chips{display:flex;flex-wrap:wrap;gap:.35rem}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:.52rem;
+  padding:.22rem .55rem;letter-spacing:.05em;
+  background:rgba(255,45,107,.06);
+  border:1px solid rgba(255,45,107,.14);
+  color:rgba(255,110,180,.7);
+  transition:background .2s,border-color .2s;
+}
+.rom-card:hover .chip{background:rgba(255,45,107,.1);border-color:rgba(255,45,107,.25)}
 
-footer{ padding: 36px 20px 50px; text-align:center; color: var(--ink-muted); font-size:0.78rem; }
+/* ═══ SKILLS ══════════════════════ */
+#skills{background:var(--bg)}
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem}
+.sk-col-title{
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  margin-bottom:1.5rem;padding-bottom:.75rem;
+  border-bottom:1px solid rgba(255,45,107,.15);
+  color:var(--pink);
+}
+.sk-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem}
+.sk-label{
+  font-family:'JetBrains Mono',monospace;font-size:.67rem;
+  color:var(--white);width:115px;flex-shrink:0;
+}
+.sk-track{
+  flex:1;height:2px;background:rgba(255,255,255,.05);
+  position:relative;overflow:hidden;
+}
+.sk-fill{
+  height:100%;width:0%;
+  transition:width 1.4s cubic-bezier(.25,.46,.45,.94);
+  background:linear-gradient(90deg,var(--rose),var(--pink),var(--purple));
+  box-shadow:0 0 10px rgba(255,45,107,.5);
+}
+.sk-pct{
+  font-family:'JetBrains Mono',monospace;font-size:.56rem;
+  color:var(--dim);width:30px;text-align:right;
+}
 
-/* ---------- lightbox ---------- */
-.lightbox{
-  position:fixed; inset:0; z-index:200; background: rgba(8,6,12,0.94);
-  display:flex; align-items:center; justify-content:center; flex-direction:column;
-  padding: 60px 20px;
+/* ═══ ABOUT & CONTACT ═════════════ */
+#about{
+  background:linear-gradient(to bottom,var(--bg2),var(--bg));
+  position:relative;overflow:hidden;
 }
-.lightbox[hidden]{ display:none; }
-.lightbox img{ max-height:72vh; max-width:90vw; object-fit:contain; border-radius:6px; box-shadow: 0 0 60px rgba(255,79,176,0.18); }
-.lb-caption{ margin-top:18px; text-align:center; }
-.lb-caption .cap-title{ font-size:1rem; }
-.lb-caption .mono{ color: var(--ink-muted); font-size:0.75rem; margin-top:6px; display:block; }
-.lb-close{
-  position:absolute; top:22px; right:28px; background:none; border:none; color: var(--ink); font-size:1.8rem; line-height:1;
+/* floating code in bg */
+.about-code-bg{
+  position:absolute;right:0;top:0;bottom:0;width:45%;
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  color:rgba(255,45,107,.04);line-height:1.8;
+  overflow:hidden;padding:6rem 1rem;
+  pointer-events:none;white-space:pre;
 }
-.lb-close:hover{ color: var(--sakura-soft); }
-.lb-nav{
-  position:absolute; top:50%; transform: translateY(-50%); background:none; border:none; color: var(--ink);
-  font-size:2.2rem; padding:10px 16px; opacity:0.65;
-}
-.lb-nav:hover{ opacity:1; color: var(--cyan); }
-.lb-prev{ left:6px; } .lb-next{ right:6px; }
 
-/* ---------- passcode modal ---------- */
-.modal{ position:fixed; inset:0; z-index:300; background: rgba(8,6,12,0.7); display:flex; align-items:center; justify-content:center; padding:20px; }
-.modal[hidden]{ display:none; }
-.modal-box{
-  background: var(--panel); border:1px solid var(--line); border-radius:14px; padding:30px; max-width:360px; width:100%;
-  box-shadow: 0 0 50px rgba(255,79,176,0.15);
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+
+.about-text .greeting{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(1.7rem,3vw,2.4rem);
+  font-style:italic;color:var(--white);
+  display:block;margin-bottom:1.3rem;
 }
-.modal-box h3{ font-family: var(--font-display); margin:0 0 8px; font-size:1.2rem; }
-.muted{ color: var(--ink-muted); font-size:0.85rem; }
-.modal-box input{
-  width:100%; margin:16px 0 8px; padding:11px 13px; border-radius:8px; border:1px solid var(--line);
-  background: var(--panel-2); color: var(--ink); font-size:0.95rem;
+.about-text .greeting .r{
+  color:var(--pink);
+  text-shadow:0 0 20px rgba(255,110,180,.5);
 }
-.error{ color:#ff6b6b; font-size:0.8rem; margin:4px 0 0; }
-.error[hidden]{ display:none; }
-.modal-actions{ display:flex; gap:10px; margin-top:18px; }
-.btn{ flex:1; padding:11px 14px; border-radius:8px; border:1px solid var(--line); font-size:0.85rem; letter-spacing:0.03em; }
-.btn-ghost{ background:transparent; color: var(--ink-muted); }
-.btn-ghost:hover{ color: var(--ink); }
-.btn-primary{ background: var(--sakura); border-color: var(--sakura); color: var(--void); font-weight:600; }
-.btn-primary:hover{ box-shadow: var(--shadow-sakura); }
-.shake{ animation: shake 0.4s; }
-@keyframes shake{ 25%{ transform: translateX(-6px); } 75%{ transform: translateX(6px); } }
+.about-text p{
+  font-size:.86rem;color:rgba(248,240,255,.6);
+  margin-bottom:1.25rem;line-height:1.95;
+}
+.about-text p strong{color:var(--white);font-weight:500}
+
+/* fun note */
+.fun-note{
+  margin-top:1.8rem;
+  padding:1.2rem 1.4rem;
+  background:rgba(192,38,211,.06);
+  border:1px solid rgba(192,38,211,.15);
+  border-left:3px solid var(--purple);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;line-height:1.85;
+  color:rgba(232,121,249,.7);
+  position:relative;
+}
+.fun-note::before{
+  content:'// note';
+  display:block;color:var(--magenta);
+  font-size:.58rem;letter-spacing:.1em;margin-bottom:.4rem;
+}
+
+/* contact glass */
+.contact-glass{
+  background:rgba(10,4,20,.6);
+  border:1px solid rgba(255,45,107,.12);
+  padding:2.2rem;
+  backdrop-filter:blur(16px);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.03);
+  position:relative;overflow:hidden;
+}
+.contact-glass::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(255,45,107,.08),transparent 70%);
+  pointer-events:none;
+}
+.contact-glass h3{
+  font-family:'DM Serif Display',serif;
+  font-size:1.4rem;font-style:italic;
+  color:var(--white);margin-bottom:.5rem;
+}
+.contact-glass p{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.67rem;color:var(--dim);
+  margin-bottom:1.8rem;line-height:1.75;
+}
+.clinks{display:flex;flex-direction:column;gap:.45rem}
+.clink{
+  font-family:'JetBrains Mono',monospace;font-size:.69rem;
+  color:var(--dim);text-decoration:none;
+  display:flex;align-items:center;gap:.7rem;
+  padding:.62rem .9rem;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,45,107,.07);
+  transition:color .2s,border-color .2s,background .2s,transform .2s,box-shadow .2s;
+  letter-spacing:.05em;
+}
+.clink:hover{
+  color:var(--pink);border-color:rgba(255,110,180,.3);
+  background:rgba(255,45,107,.05);
+  transform:translateX(5px);
+  box-shadow:0 4px 20px rgba(255,45,107,.1);
+}
+.clink .ci{font-size:.9rem;width:18px;text-align:center}
+
+/* ═══ FOOTER ══════════════════════ */
+footer{
+  background:var(--bg);
+  border-top:1px solid rgba(255,45,107,.08);
+  padding:1.8rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:3;
+}
+footer::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--rose),var(--purple),var(--pink),transparent);
+  opacity:.2;
+}
+.ft-name{
+  font-family:'DM Serif Display',serif;
+  font-size:.95rem;font-style:italic;color:var(--white);
+}
+.ft-code{
+  font-family:'JetBrains Mono',monospace;font-size:.57rem;
+  color:var(--dim);letter-spacing:.08em;
+}
+.ft-code .r{color:var(--rose)}
+.ft-code .p{color:var(--magenta)}
+
+/* ═══ REVEAL ══════════════════════ */
+.reveal{
+  opacity:0;transform:translateY(26px);
+  transition:opacity .75s cubic-bezier(.25,.46,.45,.94),
+             transform .75s cubic-bezier(.25,.46,.45,.94);
+}
+.reveal.left{transform:translateX(-26px)}
+.reveal.right{transform:translateX(26px)}
+.reveal.visible{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}
+.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ═══ SHARED ANIMS ════════════════ */
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes blink{50%{opacity:0}}
+
+/* ═══ GLITCH TEXT ═════════════════ */
+.glitch{position:relative}
+.glitch::before,.glitch::after{
+  content:attr(data-text);
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  font-family:inherit;font-size:inherit;
+  font-style:inherit;font-weight:inherit;
+  background:inherit;-webkit-background-clip:inherit;background-clip:inherit;
+}
+.glitch::before{
+  color:var(--rose);
+  clip-path:polygon(0 30%,100% 30%,100% 50%,0 50%);
+  animation:glitch1 4s infinite;left:2px;
+  -webkit-text-fill-color:var(--rose);
+}
+.glitch::after{
+  color:var(--purple);
+  clip-path:polygon(0 60%,100% 60%,100% 75%,0 75%);
+  animation:glitch2 4s infinite;left:-2px;
+  -webkit-text-fill-color:var(--purple);
+}
+@keyframes glitch1{
+  0%,85%,100%{transform:translate(0);opacity:0}
+  86%{transform:translate(-3px,1px);opacity:.8}
+  88%{transform:translate(2px,-1px);opacity:.8}
+  90%{transform:translate(0);opacity:0}
+}
+@keyframes glitch2{
+  0%,88%,100%{transform:translate(0);opacity:0}
+  89%{transform:translate(3px,-1px);opacity:.8}
+  91%{transform:translate(-1px,1px);opacity:.8}
+  93%{transform:translate(0);opacity:0}
+}
+
+/* ═══ RESPONSIVE ══════════════════ */
+@media(max-width:768px){
+  #hero{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .hero-center{display:none}
+  .hero-photo,.hero-dev{padding:5.5rem 1.8rem 3rem}
+  .photo-grid{grid-template-columns:1fr 1fr}
+  .pcard:nth-child(1){grid-column:1/3;min-height:250px}
+  .rom-grid,.about-grid,.skills-grid{grid-template-columns:1fr}
+  .device-showcase{grid-template-columns:1fr;text-align:center}
+  .device-art{max-width:320px;width:100%;margin:0 auto}
+  .sec{padding:4rem 1.5rem}
+  nav{padding:.8rem 1.2rem}
+  .nav-links{gap:1rem}
+  footer{flex-direction:column;gap:.5rem;text-align:center}
+  .about-code-bg{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
 </style>
 </head>
 <body>
 
-<div class="bg-glow"></div>
-<div class="grain"></div>
-<div class="petals" id="petals"></div>
+<div id="aurora">
+  <div class="ablob"></div><div class="ablob"></div><div class="ablob"></div>
+</div>
+<canvas id="code-rain"></canvas>
+<div id="scanline"></div>
 
-<header class="nav">
-  <div class="brand"><span class="brand-mark"></span><span id="brandName">YOUR NAME</span></div>
-  <nav class="nav-links">
-    <a href="#gallery">Gallery</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <button class="btn-edit" id="editToggleBtn" type="button" aria-label="Toggle edit mode">Edit</button>
-  </nav>
-</header>
+<div id="cur"><div id="cur-inner"></div></div>
+<div id="cur-ring"></div>
+<canvas id="cur-trail"></canvas>
 
-<main>
-  <section class="hero" id="home">
-    <p class="hero-eyebrow">PHOTOGRAPHY PORTFOLIO</p>
-    <h1 id="heroName">YOUR NAME</h1>
-    <p class="tagline" id="heroTagline">Frames pulled from neon hours and quiet light.</p>
-    <a href="#gallery" class="shutter" aria-label="Scroll to gallery"></a>
-    <span class="shutter-label">View Gallery</span>
-  </section>
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero"><span class="r">M</span>init<span class="p">_</span></a>
+  <ul class="nav-links">
+    <li><a href="#photography">📷 shots</a></li>
+    <li><a href="#development">&lt;/&gt; roms</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#about">about</a></li>
+  </ul>
+</nav>
 
-  <section class="section" id="gallery">
-    <div class="section-head">
-      <p class="eyebrow">// Selected Work</p>
-      <h2>Gallery</h2>
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+
+  <div class="hero-photo">
+    <div class="h-eyebrow rose">📷 smartphone photographer</div>
+    <h1 class="h-photo-title">
+      Seeing the world<br>
+      through a<br>
+      <em>lens in your pocket</em>
+    </h1>
+    <p class="h-desc delay1">
+      Street light. Golden hour. Motion blur at midnight.
+      Every frame captured on a smartphone — proving the best camera
+      is the one you always carry.
+    </p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap">
+      <a class="btn-rose d1" href="#photography">view my shots</a>
+    </div>
+  </div>
+
+  <div class="hero-dev">
+    <canvas id="code-rain-hero"></canvas>
+    <div class="h-eyebrow purple" style="position:relative;z-index:2">⚙ aosp developer</div>
+    <h2 class="h-dev-title">
+      $ building<br>
+      custom ROMs<br>
+      from source<span class="blink"></span>
+    </h2>
+    <p class="h-desc delay2" style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(232,121,249,.5);position:relative;z-index:2">
+      // kernel patches · device trees · system mods<br>
+      // currently maintaining: <span style="color:var(--pink)">manaus</span><br>
+      // making old hardware feel brand new
+    </p>
+    <a class="btn-ghost-rose" href="#development" style="animation-delay:.72s">explore my builds</a>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-num">24+</span><span class="stat-lbl">projects</span></div>
+      <div class="stat-item"><span class="stat-num">3y</span><span class="stat-lbl">aosp dev</span></div>
+      <div class="stat-item"><span class="stat-num">∞</span><span class="stat-lbl">patience</span></div>
+    </div>
+  </div>
+
+  <div class="hero-center">
+    <div class="center-name glitch" data-text="Minit">Minit</div>
+    <div class="center-divider"></div>
+    <div class="center-tag">photo · aosp · fun</div>
+  </div>
+
+  <div class="scroll-hint">scroll</div>
+</section>
+
+<!-- ═══ PHOTOGRAPHY ═══ -->
+<hr class="sec-hr"/>
+<section id="photography">
+  <div class="sec" style="position:relative">
+
+    <div class="code-deco">
+// import Camera from 'smartphone'<br>
+// const shot = Camera.capture({<br>
+//   mode: 'golden_hour',<br>
+//   eye: true,<br>
+// })<br>
+// shot.export('memory')
     </div>
 
-    <div class="status-bar" id="statusBar" aria-live="polite"></div>
-
-    <div class="dropzone edit-ui" id="dropzone" tabindex="0" role="button" aria-label="Upload photos">
-      <input type="file" id="fileInput" accept="image/*" multiple hidden />
-      <p>Drop photos here, or click to browse</p>
-      <p class="small">JPG or PNG — auto-optimized for fast, sharp web display.</p>
+    <div class="reveal">
+      <div class="sec-eye rose">📷 shots</div>
+      <h2 class="sec-title">The world through<br><span class="rose">smartphone glass</span></h2>
     </div>
-    <button class="text-link edit-ui" id="clearAllBtn" type="button">Clear all photos</button>
 
-    <div class="chips" id="chips"></div>
-    <div class="gallery" id="galleryGrid"></div>
-  </section>
-
-  <section class="section" id="about">
-    <div class="section-head">
-      <p class="eyebrow">// Behind the Lens</p>
-      <h2>About</h2>
-    </div>
-    <div class="about-grid">
-      <div class="about-portrait">YOUR<br>PHOTO</div>
-      <div>
-        <p class="about-bio" id="aboutBio">I'm a photographer drawn to the hours between day and night — neon signs, wet pavement, quiet portraits. This is a working archive of what I've shot lately, updated as I go.</p>
-        <div class="divider"></div>
-        <p class="about-bio">Based wherever the light is good. Available for shoots, collaborations, and prints.</p>
+    <div class="photo-grid reveal d1">
+      <div class="pcard">
+        <div class="shimmer"></div>
+        <div class="pbg">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="72" r="38" stroke="#ff6eb4" stroke-width=".8" opacity=".7"/>
+            <circle cx="100" cy="72" r="20" fill="rgba(255,110,180,.12)"/>
+            <ellipse cx="100" cy="158" rx="58" ry="26" stroke="#ff6eb4" stroke-width=".8" opacity=".4"/>
+            <line x1="100" y1="110" x2="100" y2="132" stroke="#ff6eb4" stroke-width=".8" opacity=".5"/>
+            <circle cx="100" cy="72" r="8" fill="rgba(255,110,180,.35)"/>
+            <circle cx="100" cy="72" r="55" stroke="#ff2d6b" stroke-width=".4" stroke-dasharray="3 6" opacity=".3"/>
+          </svg>
+        </div>
+        <span class="ptag">PORTRAIT</span>
+        <span class="plabel">Golden hour</span>
+      </div>
+      <div class="pcard">
+        <div class="shimmer"></div>
+        <div class="pbg">
+          <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="20" width="38" height="78" stroke="#c026d3" stroke-width=".8" opacity=".5"/>
+            <rect x="58" y="8" width="28" height="90" stroke="#c026d3" stroke-width=".8" opacity=".4"/>
+            <rect x="96" y="28" width="48" height="72" stroke="#c026d3" stroke-width=".8" opacity=".35"/>
+            <line x1="0" y1="98" x2="200" y2="98" stroke="#ff2d6b" stroke-width=".8" opacity=".4"/>
+            <circle cx="82" cy="84" r="4" fill="#ff2d6b" opacity=".6"/>
+            <circle cx="38" cy="84" r="2" fill="#c026d3" opacity=".5"/>
+          </svg>
+        </div>
+        <span class="ptag">STREET</span>
+        <span class="plabel">City after rain</span>
+      </div>
+      <div class="pcard">
+        <div class="shimmer"></div>
+        <div class="pbg">
+          <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="28" r="2" fill="#e879f9" opacity=".7"/>
+            <circle cx="105" cy="14" r="1.5" fill="#e879f9" opacity=".6"/>
+            <circle cx="162" cy="24" r="2" fill="#e879f9" opacity=".5"/>
+            <circle cx="78" cy="48" r="1" fill="#fff" opacity=".6"/>
+            <circle cx="145" cy="42" r="1.5" fill="#e879f9" opacity=".6"/>
+            <circle cx="180" cy="60" r="1" fill="#fff" opacity=".4"/>
+            <line x1="105" y1="8" x2="105" y2="80" stroke="#ff2d6b" stroke-width="8" opacity=".1"/>
+            <ellipse cx="105" cy="92" rx="55" ry="12" fill="rgba(255,45,107,.07)"/>
+          </svg>
+        </div>
+        <span class="ptag">NIGHT</span>
+        <span class="plabel">Light trails</span>
+      </div>
+      <div class="pcard">
+        <div class="shimmer"></div>
+        <div class="pbg">
+          <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="70" r="52" stroke="#ff6eb4" stroke-width=".6" opacity=".3"/>
+            <circle cx="100" cy="70" r="32" stroke="#ff6eb4" stroke-width=".8" opacity=".45"/>
+            <circle cx="100" cy="70" r="14" fill="rgba(255,110,180,.2)"/>
+            <line x1="48" y1="70" x2="86" y2="70" stroke="#ff2d6b" stroke-width=".8" opacity=".5"/>
+            <line x1="114" y1="70" x2="152" y2="70" stroke="#ff2d6b" stroke-width=".8" opacity=".5"/>
+            <line x1="100" y1="18" x2="100" y2="56" stroke="#ff2d6b" stroke-width=".8" opacity=".5"/>
+            <line x1="100" y1="84" x2="100" y2="122" stroke="#ff2d6b" stroke-width=".8" opacity=".5"/>
+          </svg>
+        </div>
+        <span class="ptag">MACRO</span>
+        <span class="plabel">Up close</span>
+      </div>
+      <div class="pcard">
+        <div class="shimmer"></div>
+        <div class="pbg">
+          <svg viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="100" y1="0" x2="0" y2="140" stroke="#7c3aed" stroke-width=".8" opacity=".5"/>
+            <line x1="100" y1="0" x2="200" y2="140" stroke="#7c3aed" stroke-width=".8" opacity=".5"/>
+            <line x1="100" y1="0" x2="48" y2="140" stroke="#7c3aed" stroke-width=".5" opacity=".3"/>
+            <line x1="100" y1="0" x2="152" y2="140" stroke="#7c3aed" stroke-width=".5" opacity=".3"/>
+            <circle cx="100" cy="2" r="3" fill="#ff2d6b" opacity=".7"/>
+          </svg>
+        </div>
+        <span class="ptag">ARCH</span>
+        <span class="plabel">Lines & space</span>
       </div>
     </div>
-  </section>
 
-  <section class="section contact" id="contact">
-    <p class="eyebrow">// Get In Touch</p>
-    <h2>Let's create something memorable</h2>
-    <p>Photography, collaborations, and creative conversations are always welcome.</p>
-    <div class="contact-links">
-      <a class="tag-link" id="telegramlink" href="t.me/Minit_exe">Telegram</a>
-      <a class="tag-link" id="instaLink" href="https://instagram.com/minit.exe" target="_blank" rel="noopener">INSTAGRAM</a>
+    <blockquote class="photo-quote reveal d2">
+      <p>"The smartphone killed the excuse that you need expensive gear. It kept the one thing that always mattered — your eye."</p>
+      <cite>— Minit</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ═══ DEVELOPMENT ═══ -->
+<hr class="sec-hr"/>
+<section id="development">
+  <div class="sec-code-bg" aria-hidden="true">class DeviceTree extends AOSP {
+  constructor(codename) {
+    super('lineage-23.0')
+    this.device = codename
+    this.kernel = new Kernel({ clang: 18, lto: true })
+    this.hal = new HAL(['audio','camera','gps'])
+    this.selinux = SEPolicy.load('./sepolicy')
+  }
+  async build() {
+    await this.kernel.compile()
+    await this.hal.bind()
+    return this.makeZip()
+  }
+}
+// init device: manaus (moto edge 40 neo)
+const manaus = new DeviceTree('manaus')
+manaus.build().then(zip => flash(zip))
+
+function flash(zip) {
+  adb.reboot('recovery')
+  twrp.install(zip)
+  console.log('ROM flashed successfully ✓')
+}
+
+// kernel patches
+const patches = [
+  'cpu-governor-performance',
+  'io-scheduler-cfq',
+  'kernelsu-integration',
+  'battery-optimization',
+]
+patches.forEach(p => kernel.apply(p))
+</div>
+
+  <div class="sec">
+    <div class="reveal">
+      <div class="sec-eye purple">⚙ aosp · kernel · rom</div>
+      <h2 class="sec-title">Building Android<br>from <span class="pur">source</span></h2>
     </div>
-  </section>
-</main>
 
+    <!-- Currently Maintaining -->
+    <div class="device-showcase reveal d1">
+      <div class="device-art">
+        <div class="device-art-glow"></div>
+        <div class="device-art-frame">
+          <img class="device-photo" src="data:image/jpeg;base64,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" alt="manaus — Motorola Moto Edge 40 Neo, the device this ROM work targets" loading="lazy"/>
+          <div class="device-photo-tint"></div>
+          <div class="device-photo-vignette"></div>
+        </div>
+        <span class="device-art-tag"><span class="device-badge-dot"></span> manaus</span>
+      </div>
+      <div class="device-info">
+        <div class="device-badge-text">
+          <strong>Currently maintaining</strong><br>
+          <span class="device-name">manaus</span> — Motorola Moto Edge 40 Neo
+        </div>
+        <div class="device-specs">
+          <span class="chip">Android 16</span>
+          <span class="chip">LineageOS 23</span>
+          <span class="chip">Maintainer</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal -->
+    <div class="terminal reveal d2">
+      <div class="term-bar">
+        <div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>
+        <span class="term-label">minit@aosp-build ~/android/lineage-23 [manaus]</span>
+      </div>
+      <div class="term-body">
+        <span class="tl"><span class="tp">$ </span><span class="tc">repo init -u https://github.com/LineageOS/android.git -b <span class="tm">lineage-23.0</span></span></span>
+        <span class="tl to">Fetching manifest ... <span class="th">done ✓</span></span>
+        <span class="tl"><span class="tp">$ </span><span class="tc">source build/envsetup.sh && breakfast <span class="tm">manaus</span></span></span>
+        <span class="tl to">including device/motorola/<span class="tm">manaus</span>/AndroidProducts.mk</span>
+        <span class="tl to">Moto Edge 40 Neo · Android 16 · <span class="th">ready ✓</span></span>
+        <span class="tl"><span class="tp">$ </span><span class="tc">brunch <span class="tm">manaus</span></span></span>
+        <span class="tl to">[ kernel ] compiling with Clang 18 + LTO ...</span>
+        <span class="tl to">[ system ] building AOSP base ...</span>
+        <span class="tl to">[ vendor ] patching motorola blobs ...</span>
+        <span class="tl to"><span class="th">lineage-23.0-*-manaus.zip</span> ready for flash <span class="th">✓</span></span>
+        <span class="tl"><span class="tp">$ </span><span class="tb"></span></span>
+      </div>
+    </div>
+
+    <!-- ROM Cards -->
+    <div class="rom-grid">
+      <div class="rom-card reveal d1">
+        <div class="rom-tag">active · manaus</div>
+        <div class="rom-title">LineageOS 23</div>
+        <p class="rom-desc">// LineageOS 23 for Moto Edge 40 Neo<br>// Android 16 · clean AOSP base<br>// quarterly security patches</p>
+        <div class="rom-chips">
+          <span class="chip">Android 16</span><span class="chip">LineageOS</span>
+          <span class="chip">manaus</span><span class="chip">OTA</span>
+        </div>
+      </div>
+      <div class="rom-card reveal d2">
+        <div class="rom-tag">kernel work</div>
+        <div class="rom-title">Custom Kernel</div>
+        <p class="rom-desc">// Performance-tuned kernel fork<br>// Clang 18 + LTO · CPU governor tweak<br>// KernelSU support baked in</p>
+        <div class="rom-chips">
+          <span class="chip">KernelSU</span><span class="chip">Clang 18</span>
+          <span class="chip">LTO</span><span class="chip">LLVM</span>
+        </div>
+      </div>
+      <div class="rom-card reveal d3">
+        <div class="rom-tag">privacy build</div>
+        <div class="rom-title">GApps-Free</div>
+        <p class="rom-desc">// Fully de-Googled AOSP build<br>// MicroG integration · F-Droid ready<br>// privacy-first daily driver</p>
+        <div class="rom-chips">
+          <span class="chip">MicroG</span><span class="chip">De-Googled</span>
+          <span class="chip">F-Droid</span><span class="chip">Privacy</span>
+        </div>
+      </div>
+      <div class="rom-card reveal d4">
+        <div class="rom-tag">device bringup</div>
+        <div class="rom-title">Device Tree</div>
+        <p class="rom-desc">// Device tree from scratch<br>// HAL configs · SEPolicy fixes<br>// vendor blob extraction & patching</p>
+        <div class="rom-chips">
+          <span class="chip">HAL</span><span class="chip">SELinux</span>
+          <span class="chip">Vendor Blobs</span><span class="chip">DTBO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SKILLS ═══ -->
+<hr class="sec-hr"/>
+<section id="skills">
+  <div class="sec">
+    <div class="reveal">
+      <div class="sec-eye rose">two crafts</div>
+      <h2 class="sec-title">Skills across <span class="rose">lens</span> & <span class="pur">code</span></h2>
+    </div>
+    <div class="skills-grid reveal d1">
+      <div>
+        <div class="sk-col-title">📷 photography</div>
+        <div class="sk-row" data-pct="95"><span class="sk-label">Composition</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">95%</span></div>
+        <div class="sk-row" data-pct="92"><span class="sk-label">Mobile Camera</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">92%</span></div>
+        <div class="sk-row" data-pct="85"><span class="sk-label">Lightroom</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">85%</span></div>
+        <div class="sk-row" data-pct="82"><span class="sk-label">Night Mode</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">82%</span></div>
+        <div class="sk-row" data-pct="90"><span class="sk-label">Storytelling</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">90%</span></div>
+      </div>
+      <div>
+        <div class="sk-col-title">&lt;/&gt; aosp dev</div>
+        <div class="sk-row" data-pct="90"><span class="sk-label">AOSP Build</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">90%</span></div>
+        <div class="sk-row" data-pct="86"><span class="sk-label">Device Tree</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">86%</span></div>
+        <div class="sk-row" data-pct="80"><span class="sk-label">Kernel Dev</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">80%</span></div>
+        <div class="sk-row" data-pct="88"><span class="sk-label">Android HAL</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">88%</span></div>
+        <div class="sk-row" data-pct="75"><span class="sk-label">SELinux</span><div class="sk-track"><div class="sk-fill"></div></div><span class="sk-pct">75%</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT & CONTACT ═══ -->
+<hr class="sec-hr"/>
+<section id="about">
+  <div class="about-code-bg" aria-hidden="true">class Minit {
+  name = 'Minit'
+  role = ['photographer','aosp-dev']
+  device = 'manaus'
+  motivation = 'fun'
+
+  shoot(moment) {
+    return Camera
+      .aim(moment)
+      .click()
+  }
+
+  buildROM(device) {
+    return AOSP
+      .sync()
+      .configure(device)
+      .compile()
+      .flash()
+  }
+
+  // why do i do this?
+  get reason() {
+    return 'just for the fun of it'
+  }
+}
+
+const me = new Minit()
+me.shoot('golden_hour')
+me.buildROM('manaus')
+  </div>
+  <div class="sec">
+    <div class="about-grid">
+      <div class="about-text reveal left">
+        <span class="greeting">Hey, I'm <span class="r">Minit</span></span>
+        <p>A developer who builds <strong>custom Android ROMs from AOSP source</strong> and a photographer who shoots everything on a smartphone — the same device I just flashed.</p>
+        <p>Currently <strong>maintaining manaus</strong> (Moto Edge 40 Neo) — working on device tree, kernel optimizations, and keeping it updated with latest security patches.</p>
+        <p>By evening I'm chasing <strong>golden hour light</strong>. By night I'm staring at build logs. Both feel the same kind of satisfying when they come together.</p>
+        <div class="fun-note">
+          I do all of this — the ROM building, the photography, the late-night kernel
+          debugging — purely <strong style="color:var(--magenta)">for fun</strong>. No contracts, no deadlines.
+          Just a person who loves making things work, look good, and feel alive.
+          Code and cameras are my playgrounds.
+        </div>
+      </div>
+      <div class="contact-glass reveal right">
+        <h3>Let's connect</h3>
+        <p>
+          // open for ROM collaboration<br>
+          // photography feedback welcome<br>
+          // or just a chat about Android internals
+        </p>
+        <div class="clinks">
+          <a class="clink" href="https://github.com" target="_blank">
+            <span class="ci">⌥</span> GitHub — ROM source & device trees
+          </a>
+          <a class="clink" href="https://t.me" target="_blank">
+            <span class="ci">✈</span> Telegram — @Minit
+          </a>
+          <a class="clink" href="https://instagram.com" target="_blank">
+            <span class="ci">◈</span> Instagram — photography
+          </a>
+          <a class="clink" href="https://xdaforums.com" target="_blank">
+            <span class="ci">▸</span> XDA Forums — ROM threads
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  <span id="footerLine">© 2026 YOUR NAME. Built with light and patience.</span>
+  <span class="ft-name">Minit</span>
+  <span class="ft-code">
+    <span class="r">📷 shots</span> · <span class="p">⚙ roms</span> · built just for fun
+  </span>
 </footer>
 
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox" hidden>
-  <button class="lb-close" id="lbClose" aria-label="Close">×</button>
-  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous photo">‹</button>
-  <img id="lbImage" src="" alt="" />
-  <div class="lb-caption">
-    <div class="cap-title" id="lbTitle"></div>
-    <span class="mono" id="lbMeta"></span>
-  </div>
-  <button class="lb-nav lb-next" id="lbNext" aria-label="Next photo">›</button>
-</div>
-
-<!-- Passcode modal -->
-<div class="modal" id="passModal" hidden>
-  <div class="modal-box">
-    <h3>Editor access</h3>
-    <p class="muted">Enter the passcode to add or manage photos.</p>
-    <input type="password" id="passInput" autocomplete="off" placeholder="Passcode" />
-    <p class="error" id="passError" hidden>That's not it — try again.</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" id="passCancel" type="button">Cancel</button>
-      <button class="btn btn-primary" id="passSubmit" type="button">Unlock</button>
-    </div>
-  </div>
-</div>
-
 <script>
-/* ============================================================
-   CONFIG — edit these to make the site yours
-   ============================================================ */
-const CONFIG = {
-  siteName: "Minit",
-  tagline: "Student • Mobile Photographer • Android ROM Enthusiast",
-  aboutBio: "Hi, I'm Minit — a student with a passion for mobile photography and Android development. Through MClicks, I share moments captured from everyday life, focusing on minimal compositions, light, and emotion. Alongside photography, I enjoy learning about custom ROM development and open-source Android projects.",
-  email: "your@email.com",
-  instagram: "https://instagram.com/",
-  // Anyone who knows this can enter Edit Mode and add/remove photos.
-  // This is a friendly speed bump, NOT real security — change it to
-  // something only you know, but don't rely on it to protect private content.
-  editPasscode: "sakura2026"
-};
+/* respects the OS-level "reduce motion" setting for the heavier ambient effects below */
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-document.getElementById('brandName').textContent = CONFIG.siteName;
-document.getElementById('heroName').textContent = CONFIG.siteName;
-document.getElementById('heroTagline').textContent = CONFIG.tagline;
-document.getElementById('aboutBio').textContent = CONFIG.aboutBio;
-document.getElementById('emailLink').href = 'mailto:' + CONFIG.email;
-document.getElementById('instaLink').href = CONFIG.instagram;
-document.getElementById('footerLine').textContent = '© ' + new Date().getFullYear() + ' ' + CONFIG.siteName + '. Built with light and patience.';
-document.title = CONFIG.siteName + ' — Photography';
+/* ═══════════════════════════════════════
+   CURSOR
+════════════════════════════════════════ */
+const curEl   = document.getElementById('cur');
+const curRing = document.getElementById('cur-ring');
+const trailCvs= document.getElementById('cur-trail');
+const tctx    = trailCvs.getContext('2d');
+let mx=-200,my=-200,rx=-200,ry=-200;
+const trail=[];
 
-/* ============================================================
-   Ambient sakura petals
-   ============================================================ */
-(function initPetals(){
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const wrap = document.getElementById('petals');
-  const count = reduceMotion ? 6 : 16;
-  for (let i=0;i<count;i++){
-    const p = document.createElement('div');
-    p.className = 'petal';
-    const size = 6 + Math.random()*10;
-    p.style.width = size+'px';
-    p.style.height = size+'px';
-    p.style.left = Math.random()*100+'vw';
-    p.style.animationDuration = (10 + Math.random()*14)+'s';
-    p.style.animationDelay = (Math.random()*-20)+'s';
-    wrap.appendChild(p);
+function resizeT(){trailCvs.width=innerWidth;trailCvs.height=innerHeight}
+resizeT();addEventListener('resize',resizeT);
+
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  curEl.style.transform=`translate(${mx-5}px,${my-5}px)`;
+  trail.push({x:mx,y:my,a:1,s:5,
+    c:Math.random()>.5?'255,45,107':'192,38,211'});
+  if(trail.length>24)trail.shift();
+});
+
+(function loopCursor(){
+  requestAnimationFrame(loopCursor);
+  if(document.hidden) return;
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  curRing.style.transform=`translate(${rx-19}px,${ry-19}px)`;
+  if(!trail.length) return;
+  tctx.clearRect(0,0,trailCvs.width,trailCvs.height);
+  for(let i=trail.length-1;i>=0;i--){
+    const t=trail[i];
+    t.a*=.78;t.s*=.88;
+    tctx.fillStyle=`rgba(${t.c},${t.a*.6})`;
+    tctx.fillRect(t.x-t.s/2,t.y-t.s/2,t.s,t.s);
+    if(t.a<0.02) trail.splice(i,1);
   }
 })();
 
-/* ============================================================
-   State + storage helpers
-   ============================================================ */
-const state = { photos: [], filter: 'All', visible: [], lbIndex: 0 };
+/* ═══════════════════════════════════════
+   GLOBAL CODE RAIN (background)
+════════════════════════════════════════ */
+const rainCvs=document.getElementById('code-rain');
+const rctx=rainCvs.getContext('2d');
+function resizeRain(){rainCvs.width=innerWidth;rainCvs.height=innerHeight}
+resizeRain();addEventListener('resize',()=>{resizeRain();initRain()});
 
-function setStatus(msg){ document.getElementById('statusBar').textContent = msg || ''; }
+const CHARS='アイウエオカキクケコサシスセソタチツテトナニヌネノAOSPKERNELROMANDROIDDEVICETREEFLASHRECOVERY01';
+let rainCols,rainDrops;
+function initRain(){
+  rainCols=Math.floor(rainCvs.width/16);
+  rainDrops=Array(rainCols).fill(0).map(()=>Math.random()*rainCvs.height/16);
+}
+initRain();
 
-function escapeHtml(str){
-  return String(str || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-async function getIndex(){
-  try{
-    const res = await window.storage.get('gallery-index', true);
-    return res ? JSON.parse(res.value) : [];
-  }catch(e){ return []; }
-}
-async function setIndex(arr){
-  return window.storage.set('gallery-index', JSON.stringify(arr), true);
-}
-async function savePhoto(photo){
-  return window.storage.set('photo:'+photo.id, JSON.stringify(photo), true);
-}
-async function deleteStoredPhoto(id){
-  try{ await window.storage.delete('photo:'+id, true); }catch(e){}
-}
-
-function generateId(){
-  return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,8);
-}
-function prettifyFilename(name){
-  const base = name.replace(/\.[^/.]+$/, '');
-  const spaced = base.replace(/[-_]+/g, ' ').trim();
-  const titled = spaced.replace(/\b\w/g, c => c.toUpperCase());
-  return titled || 'Untitled';
-}
-
-/* ============================================================
-   Image compression (resize + recompress to fit storage limits)
-   ============================================================ */
-function compressImage(file){
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error('read failed'));
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onerror = () => reject(new Error('decode failed'));
-      img.onload = () => {
-        let { width, height } = img;
-        const maxDim = 2000;
-        if (width > maxDim || height > maxDim){
-          if (width > height){ height = Math.round(height*maxDim/width); width = maxDim; }
-          else { width = Math.round(width*maxDim/height); height = maxDim; }
-        }
-        const canvas = document.createElement('canvas');
-        canvas.width = width; canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-
-        const targetBytes = 1.4*1024*1024;
-        const approxBytes = (url) => Math.round((url.length - url.indexOf(',') - 1) * 3/4);
-
-        let quality = 0.85;
-        let dataUrl = canvas.toDataURL('image/jpeg', quality);
-        while (approxBytes(dataUrl) > targetBytes && quality > 0.5){
-          quality -= 0.07;
-          dataUrl = canvas.toDataURL('image/jpeg', quality);
-        }
-        if (approxBytes(dataUrl) > targetBytes){
-          const scale = Math.sqrt(targetBytes/approxBytes(dataUrl));
-          const w2 = Math.max(500, Math.round(width*scale));
-          const h2 = Math.max(350, Math.round(height*scale));
-          canvas.width = w2; canvas.height = h2;
-          ctx.drawImage(img, 0, 0, w2, h2);
-          dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        }
-        resolve(dataUrl);
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-/* ============================================================
-   Load gallery on start
-   ============================================================ */
-async function loadGallery(){
-  setStatus('Loading gallery…');
-  const idx = await getIndex();
-  const results = await Promise.allSettled(idx.map(id => window.storage.get('photo:'+id, true)));
-  const photos = [];
-  results.forEach(r => {
-    if (r.status === 'fulfilled' && r.value){
-      try{ photos.push(JSON.parse(r.value.value)); }catch(e){}
+let rainAcc=0,rainLast=performance.now();
+const rainInterval=reduceMotion?220:55;
+function rainLoop(now){
+  requestAnimationFrame(rainLoop);
+  if(document.hidden)return;
+  rainAcc+=now-rainLast;rainLast=now;
+  if(rainAcc<rainInterval)return;
+  rainAcc=0;
+  rctx.fillStyle='rgba(5,2,10,0.05)';
+  rctx.fillRect(0,0,rainCvs.width,rainCvs.height);
+  for(let i=0;i<rainCols;i++){
+    const ch=CHARS[Math.floor(Math.random()*CHARS.length)];
+    // gradient colour: top = bright rose, lower = purple/dim
+    const progress=rainDrops[i]*16/rainCvs.height;
+    if(progress<.15){
+      rctx.fillStyle=`rgba(255,110,180,${.9-progress*4})`;
+    } else {
+      rctx.fillStyle=`rgba(192,38,211,${.25*(1-progress)})`;
     }
-  });
-  state.photos = photos;
-  setStatus('');
-  renderGallery();
-}
-
-/* ============================================================
-   Rendering
-   ============================================================ */
-function renderChips(){
-  const cats = ['All', ...new Set(state.photos.map(p => p.category || 'Uncategorized'))];
-  const chips = document.getElementById('chips');
-  chips.innerHTML = cats.map(c =>
-    `<button class="chip ${c===state.filter?'active':''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</button>`
-  ).join('');
-}
-
-function renderGallery(){
-  renderChips();
-  const grid = document.getElementById('galleryGrid');
-  const filtered = state.filter === 'All'
-    ? state.photos
-    : state.photos.filter(p => (p.category||'Uncategorized') === state.filter);
-  state.visible = filtered;
-
-  if (state.photos.length === 0){
-    grid.innerHTML = `<div class="empty" style="column-span:all;">
-      <h3>No shots yet</h3>
-      <p>Open Edit Mode above to upload your first photo.</p>
-    </div>`;
-    return;
+    rctx.font='13px JetBrains Mono,monospace';
+    rctx.fillText(ch,i*16,rainDrops[i]*16);
+    if(rainDrops[i]*16>rainCvs.height&&Math.random()>.97)rainDrops[i]=0;
+    rainDrops[i]+=.5+Math.random()*.5;
   }
-  if (filtered.length === 0){
-    grid.innerHTML = `<div class="empty" style="column-span:all;">
-      <h3>Nothing in "${escapeHtml(state.filter)}" yet</h3>
-      <p>Try another category, or add a photo with this tag.</p>
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML = filtered.map((p, i) => `
-    <figure class="frame" data-id="${escapeHtml(p.id)}">
-      <div class="frame-inner" data-open="${i}">
-        <img src="${p.dataUrl}" alt="${escapeHtml(p.title)}" loading="lazy" />
-        <span class="bracket tl"></span><span class="bracket tr"></span><span class="bracket bl"></span><span class="bracket br"></span>
-        <figcaption class="frame-caption">
-          <span class="cap-title">${escapeHtml(p.title)}</span>
-          <span class="cap-cat mono">${escapeHtml(p.category || 'Uncategorized')}</span>
-        </figcaption>
-      </div>
-      <div class="frame-edit edit-ui">
-        <input class="edit-input" data-field="title" data-id="${escapeHtml(p.id)}" value="${escapeHtml(p.title)}" aria-label="Title" />
-        <input class="edit-input" data-field="category" data-id="${escapeHtml(p.id)}" value="${escapeHtml(p.category||'')}" aria-label="Category" placeholder="Category" />
-        <button class="frame-delete" data-id="${escapeHtml(p.id)}" aria-label="Delete photo" type="button">×</button>
-      </div>
-    </figure>
-  `).join('');
 }
+requestAnimationFrame(rainLoop);
 
-/* ============================================================
-   Adding photos
-   ============================================================ */
-async function ingestFiles(fileList){
-  const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
-  if (!files.length) return;
-  for (const file of files){
-    setStatus(`Adding ${file.name}…`);
-    try{
-      const dataUrl = await compressImage(file);
-      const photo = { id: generateId(), title: prettifyFilename(file.name), category: 'Uncategorized', dataUrl, ts: Date.now() };
-      await savePhoto(photo);
-      const idx = await getIndex();
-      idx.unshift(photo.id);
-      await setIndex(idx);
-      state.photos.unshift(photo);
-      renderGallery();
-    }catch(e){
-      console.error(e);
-      setStatus(`Couldn't add ${file.name} — try a different file.`);
+/* ═══════════════════════════════════════
+   HERO CODE RAIN (dev side only)
+════════════════════════════════════════ */
+const hrc=document.getElementById('code-rain-hero');
+const hrctx=hrc.getContext('2d');
+function resizeHrc(){
+  hrc.width=hrc.parentElement.offsetWidth;
+  hrc.height=hrc.parentElement.offsetHeight;
+}
+resizeHrc();addEventListener('resize',resizeHrc);
+
+const hChars='AOSPKERNELDEVICETREEHALFLASHMANAUSRECOVERYSELINUXVENDOR{}[];()=>0x1';
+const hCols=()=>Math.floor(hrc.width/13);
+let hDrops=[];
+function initHDrops(){hDrops=Array(hCols()).fill(1)}
+initHDrops();addEventListener('resize',initHDrops);
+
+let hRainAcc=0,hRainLast=performance.now();
+const hRainInterval=reduceMotion?260:65;
+function hRainLoop(now){
+  requestAnimationFrame(hRainLoop);
+  if(document.hidden)return;
+  hRainAcc+=now-hRainLast;hRainLast=now;
+  if(hRainAcc<hRainInterval)return;
+  hRainAcc=0;
+  hrctx.fillStyle='rgba(5,2,10,0.07)';
+  hrctx.fillRect(0,0,hrc.width,hrc.height);
+  for(let i=0;i<hDrops.length;i++){
+    const ch=hChars[Math.floor(Math.random()*hChars.length)];
+    const bright=Math.random()>.9;
+    hrctx.fillStyle=bright?'rgba(255,45,107,.85)':'rgba(192,38,211,.5)';
+    hrctx.font='12px JetBrains Mono,monospace';
+    hrctx.fillText(ch,i*13,hDrops[i]*13);
+    if(hDrops[i]*13>hrc.height&&Math.random()>.975)hDrops[i]=0;
+    hDrops[i]++;
+  }
+}
+requestAnimationFrame(hRainLoop);
+
+/* ═══════════════════════════════════════
+   FLOATING PARTICLES
+════════════════════════════════════════ */
+const pCvs=document.createElement('canvas');
+pCvs.style.cssText='position:fixed;inset:0;z-index:1;pointer-events:none';
+document.body.prepend(pCvs);
+const pctx=pCvs.getContext('2d');
+function resizeP(){pCvs.width=innerWidth;pCvs.height=innerHeight}
+resizeP();addEventListener('resize',resizeP);
+
+const PARTICLE_COUNT=reduceMotion?0:28;
+const CONNECT_DIST=120,CONNECT_DIST2=CONNECT_DIST*CONNECT_DIST;
+const particles=Array.from({length:PARTICLE_COUNT},()=>({
+  x:Math.random()*innerWidth,
+  y:Math.random()*innerHeight,
+  r:Math.random()*1.5+.3,
+  vx:(Math.random()-.5)*.25,
+  vy:(Math.random()-.5)*.25,
+  a:Math.random()*.5+.1,
+  c:Math.random()>.5?[255,45,107]:[192,38,211],
+  pulse:Math.random()*Math.PI*2,
+  pulseV:Math.random()*.02+.005,
+}));
+
+(function loopP(){
+  requestAnimationFrame(loopP);
+  if(document.hidden)return;
+  pctx.clearRect(0,0,pCvs.width,pCvs.height);
+  const n=particles.length;
+  for(let i=0;i<n;i++){
+    const p=particles[i];
+    p.x+=p.vx;p.y+=p.vy;p.pulse+=p.pulseV;
+    if(p.x<0)p.x=pCvs.width;
+    if(p.x>pCvs.width)p.x=0;
+    if(p.y<0)p.y=pCvs.height;
+    if(p.y>pCvs.height)p.y=0;
+    const glow=Math.sin(p.pulse)*.3+.7;
+    pctx.beginPath();
+    pctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    pctx.fillStyle=`rgba(${p.c[0]},${p.c[1]},${p.c[2]},${p.a*glow})`;
+    pctx.fill();
+  }
+  // connection lines: each pair checked once, with a cheap squared-distance
+  // pre-filter so sqrt only runs for pairs that are actually close enough to draw
+  for(let i=0;i<n;i++){
+    const p=particles[i];
+    for(let j=i+1;j<n;j++){
+      const q=particles[j];
+      const dx=p.x-q.x,dy=p.y-q.y;
+      const d2=dx*dx+dy*dy;
+      if(d2<CONNECT_DIST2){
+        const dist=Math.sqrt(d2);
+        pctx.beginPath();
+        pctx.moveTo(p.x,p.y);pctx.lineTo(q.x,q.y);
+        pctx.strokeStyle=`rgba(${p.c[0]},${p.c[1]},${p.c[2]},${(1-dist/CONNECT_DIST)*.06})`;
+        pctx.lineWidth=.5;
+        pctx.stroke();
+      }
     }
   }
-  setStatus('');
-}
+})();
 
-/* ============================================================
-   Editing / deleting
-   ============================================================ */
-async function updatePhotoField(id, field, value){
-  const photo = state.photos.find(p => p.id === id);
-  if (!photo) return;
-  photo[field] = value;
-  try{ await savePhoto(photo); }
-  catch(e){ setStatus('Could not save changes.'); }
-}
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+════════════════════════════════════════ */
+const reveals=document.querySelectorAll('.reveal');
+const revIO=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revIO.unobserve(e.target)}});
+},{threshold:.1});
+reveals.forEach(el=>revIO.observe(el));
 
-async function deletePhotoById(id){
-  if (!confirm("Delete this photo? This can't be undone.")) return;
-  state.photos = state.photos.filter(p => p.id !== id);
-  renderGallery();
-  try{
-    const idx = await getIndex();
-    await setIndex(idx.filter(x => x !== id));
-    await deleteStoredPhoto(id);
-  }catch(e){ setStatus('Could not delete — try again.'); }
-}
+/* ═══════════════════════════════════════
+   SKILL BARS
+════════════════════════════════════════ */
+const barIO=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.sk-row').forEach(row=>{
+        row.querySelector('.sk-fill').style.width=row.dataset.pct+'%';
+      });
+      barIO.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.skills-grid').forEach(el=>barIO.observe(el));
 
-async function clearAllPhotos(){
-  if (!confirm('Delete ALL photos from this gallery? This cannot be undone.')) return;
-  const idx = await getIndex();
-  setStatus('Clearing gallery…');
-  for (const id of idx){ await deleteStoredPhoto(id); }
-  await setIndex([]);
-  state.photos = [];
-  state.filter = 'All';
-  setStatus('');
-  renderGallery();
-}
+/* ═══════════════════════════════════════
+   TYPED HERO SUBTITLE
+════════════════════════════════════════ */
+const devTitle=document.querySelector('.h-dev-title');
+const blinkEl=devTitle.querySelector('.blink');
+const phrases=[
+  '$ building\ncustom ROMs\nfrom source',
+  '$ flashing\nmanaus device\nwith love',
+  '$ compiling\nkernel patches\nfor fun',
+  '$ shooting\ngolden hour\nwith a phone',
+];
+let pi=0,ci=0,del=false;
+const lines=document.createTextNode('');
+devTitle.prepend(lines);
 
-/* ============================================================
-   Edit mode + passcode
-   ============================================================ */
-const editToggleBtn = document.getElementById('editToggleBtn');
-const passModal = document.getElementById('passModal');
-const passInput = document.getElementById('passInput');
-const passError = document.getElementById('passError');
-
-function enterEditMode(){
-  document.body.classList.add('is-editing');
-  editToggleBtn.textContent = 'Done';
-  renderGallery();
-}
-function exitEditMode(){
-  document.body.classList.remove('is-editing');
-  editToggleBtn.textContent = 'Edit';
-  renderGallery();
-}
-function openPassModal(){
-  passModal.hidden = false;
-  passError.hidden = true;
-  passInput.value = '';
-  passInput.focus();
-}
-function closePassModal(){ passModal.hidden = true; }
-function submitPasscode(){
-  if (passInput.value === CONFIG.editPasscode){
-    closePassModal();
-    enterEditMode();
+function typeLoop(){
+  const full=phrases[pi];
+  if(!del){
+    lines.textContent=full.slice(0,ci+1).replace(/\\n/g,'\n');
+    ci++;
+    if(ci===full.length){del=true;setTimeout(typeLoop,2200);return}
   } else {
-    passError.hidden = false;
-    const box = passModal.querySelector('.modal-box');
-    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+    lines.textContent=full.slice(0,ci-1).replace(/\\n/g,'\n');
+    ci--;
+    if(ci===0){del=false;pi=(pi+1)%phrases.length}
   }
+  setTimeout(typeLoop,del?32:55);
 }
+setTimeout(typeLoop,1000);
 
-editToggleBtn.addEventListener('click', () => {
-  if (document.body.classList.contains('is-editing')) exitEditMode();
-  else openPassModal();
-});
-document.getElementById('passCancel').addEventListener('click', closePassModal);
-document.getElementById('passSubmit').addEventListener('click', submitPasscode);
-passInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitPasscode(); });
-
-/* ============================================================
-   Dropzone
-   ============================================================ */
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
-dropzone.addEventListener('click', () => fileInput.click());
-dropzone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
-fileInput.addEventListener('change', () => { ingestFiles(fileInput.files); fileInput.value = ''; });
-['dragover','dragenter'].forEach(ev => dropzone.addEventListener(ev, (e) => {
-  e.preventDefault(); dropzone.classList.add('is-dragover');
-}));
-['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, (e) => {
-  e.preventDefault(); dropzone.classList.remove('is-dragover');
-}));
-dropzone.addEventListener('drop', (e) => { ingestFiles(e.dataTransfer.files); });
-
-document.getElementById('clearAllBtn').addEventListener('click', clearAllPhotos);
-
-/* ============================================================
-   Gallery interactions (delegated)
-   ============================================================ */
-const galleryGrid = document.getElementById('galleryGrid');
-const chips = document.getElementById('chips');
-
-chips.addEventListener('click', (e) => {
-  const chip = e.target.closest('.chip');
-  if (!chip) return;
-  state.filter = chip.dataset.cat;
-  renderGallery();
+/* ═══════════════════════════════════════
+   MAGNETIC BUTTONS
+════════════════════════════════════════ */
+document.querySelectorAll('.btn-rose,.btn-ghost-rose,.clink').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const dx=e.clientX-(r.left+r.width/2);
+    const dy=e.clientY-(r.top+r.height/2);
+    btn.style.transform=`translate(${dx*.1}px,${dy*.1-2}px)`;
+  });
+  btn.addEventListener('mouseleave',()=>{btn.style.transform=''});
 });
 
-galleryGrid.addEventListener('click', (e) => {
-  const delBtn = e.target.closest('.frame-delete');
-  if (delBtn){ deletePhotoById(delBtn.dataset.id); return; }
-  if (e.target.closest('.edit-input')) return;
-  const inner = e.target.closest('.frame-inner');
-  if (inner){ openLightbox(Number(inner.dataset.open)); }
+/* ═══════════════════════════════════════
+   CARD MOUSE GLOW
+════════════════════════════════════════ */
+document.querySelectorAll('.rom-card,.pcard').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+    card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+  });
 });
 
-galleryGrid.addEventListener('focusout', (e) => {
-  const input = e.target.closest('.edit-input');
-  if (!input) return;
-  updatePhotoField(input.dataset.id, input.dataset.field, input.value);
-});
-
-/* ============================================================
-   Lightbox
-   ============================================================ */
-const lightbox = document.getElementById('lightbox');
-const lbImage = document.getElementById('lbImage');
-const lbTitle = document.getElementById('lbTitle');
-const lbMeta = document.getElementById('lbMeta');
-
-function openLightbox(i){
-  state.lbIndex = i;
-  renderLightbox();
-  lightbox.hidden = false;
-}
-function renderLightbox(){
-  const p = state.visible[state.lbIndex];
-  if (!p) return;
-  lbImage.src = p.dataUrl;
-  lbImage.alt = p.title;
-  lbTitle.textContent = p.title;
-  lbMeta.textContent = `${p.category || 'Uncategorized'} · ${state.lbIndex+1} / ${state.visible.length}`;
-}
-function closeLightbox(){ lightbox.hidden = true; }
-function lbNext(){ state.lbIndex = (state.lbIndex+1) % state.visible.length; renderLightbox(); }
-function lbPrev(){ state.lbIndex = (state.lbIndex-1+state.visible.length) % state.visible.length; renderLightbox(); }
-
-document.getElementById('lbClose').addEventListener('click', closeLightbox);
-document.getElementById('lbNext').addEventListener('click', lbNext);
-document.getElementById('lbPrev').addEventListener('click', lbPrev);
-lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-document.addEventListener('keydown', (e) => {
-  if (lightbox.hidden) return;
-  if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowRight') lbNext();
-  if (e.key === 'ArrowLeft') lbPrev();
-});
-
-/* ============================================================
-   Init
-   ============================================================ */
-loadGallery();
+/* ═══════════════════════════════════════
+   NAV ACTIVE HIGHLIGHT
+════════════════════════════════════════ */
+const secs=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav-links a');
+const navIO=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(a=>{
+        a.style.color=a.getAttribute('href')==='#'+e.target.id?'var(--white)':'';
+      });
+    }
+  });
+},{threshold:.5});
+secs.forEach(s=>navIO.observe(s));
 </script>
 </body>
 </html>
