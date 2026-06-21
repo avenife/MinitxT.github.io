@@ -57,7 +57,7 @@ Custom ROM collection for Moto Edge 40 Neo including:
 
 ## GitHub
 
-🐙 https://github.com/Minit
+🐙 https://github.com/MinitxT
 
 ## Screenshots
 
