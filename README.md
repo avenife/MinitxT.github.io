@@ -3,7 +3,7 @@
 # 🚀 Minit Portfolio
 
 **Personal portfolio website of Minit**  
-AOSP Enthusiast | Custom ROM Developer | Mobile Photographer | Student
+AOSP Enthusiast | Custom ROM Developer | Student
 
 [![Website](https://img.shields.io/badge/Website-minitxt.github.io-8b5cf6?style=for-the-badge&logo=google-chrome&logoColor=white)](https://minitxt.github.io/)
 [![GitHub](https://img.shields.io/badge/GitHub-MinitxT-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MinitxT)
