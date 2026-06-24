@@ -3,36 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minit — AOSP Developer</title>
-  <meta name="description" content="Student AOSP developer building custom ROMs for fun. crDroid & Evolution X for Moto Edge 40 Neo." />
+  <title>Minit — AOSP Developer And Web Desi</title>
+  <meta name="description" content="Student AOSP developer building custom ROMs for fun. LineageOS based builds for Moto Edge 40 Neo, Android 16." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Space+Grotesk:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      /* true AMOLED black scale */
+      /* true AMOLED black scale — pink neon sakura theme */
       --void:     #000000;
-      --deep:     #050505;
-      --surface:  #050505;
-      --card:     #0a0a0a;
-      --card-2:   #0d0d0f;
-      --border:   rgba(139,92,246,.18);
-      --purple:   #8b5cf6;
-      --violet:   #7c3aed;
-      --indigo:   #6366f1;
-      --pink:     #ec4899;
-      --accent:   #c084fc;
-      --glow:     #d946ef;
-      --rose:     #f43f5e;
+      --deep:     #000000;
+      --surface:  #050103;
+      --card:     #0a0408;
+      --card-2:   #0d060a;
+      --border:   rgba(255,45,149,.22);
+      --purple:   #ff2d95;
+      --violet:   #e0177d;
+      --indigo:   #ff5fad;
+      --pink:     #ff5fad;
+      --accent:   #ff8fc9;
+      --glow:     #ff1f8f;
+      --rose:     #ff3d7f;
       --green:    #10b981;
       --amber:    #f59e0b;
-      --text:     #f1f5f9;
-      --muted:    #94a3b8;
-      --subtle:   #475569;
-      --dim:      #1e1e42;
-      --glass:    rgba(255,255,255,.025);
-      --gp:       rgba(139,92,246,.45);
-      --gpk:      rgba(236,72,153,.35);
+      --text:     #fff3f8;
+      --muted:    #c98aab;
+      --subtle:   #6b3a52;
+      --dim:      #2a0e1e;
+      --glass:    rgba(255,95,173,.04);
+      --gp:       rgba(255,45,149,.5);
+      --gpk:      rgba(255,95,173,.4);
     }
 
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -54,30 +54,12 @@
       font-family:'Space Grotesk',sans-serif;
       min-height:100vh;
       overflow-x:hidden;
-      cursor:none;
     }
 
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width:5px; }
     ::-webkit-scrollbar-track { background:var(--deep); }
     ::-webkit-scrollbar-thumb { background:var(--violet); border-radius:3px; }
-
-    /* ── Custom cursor ── */
-    #cur {
-      position:fixed; width:10px; height:10px;
-      background:var(--purple); border-radius:50%;
-      pointer-events:none; z-index:9999;
-      transform:translate(-50%,-50%);
-      transition:transform .08s;
-      mix-blend-mode:screen;
-    }
-    #cur-ring {
-      position:fixed; width:28px; height:28px;
-      border:1px solid rgba(139,92,246,.5); border-radius:50%;
-      pointer-events:none; z-index:9998;
-      transform:translate(-50%,-50%);
-      transition:all .18s ease;
-    }
 
     /* ── Sakura canvas ── */
     #sk { position:fixed; inset:0; pointer-events:none; z-index:0; }
@@ -86,8 +68,8 @@
     .bg-grid {
       position:fixed; inset:0; pointer-events:none; z-index:0;
       background-image:
-        linear-gradient(rgba(139,92,246,.04) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(139,92,246,.04) 1px,transparent 1px);
+        linear-gradient(rgba(255,45,149,.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,45,149,.04) 1px,transparent 1px);
       background-size:55px 55px;
     }
 
@@ -103,7 +85,7 @@
     .nav-logo {
       font-family:'Orbitron',monospace; font-size:1.1rem; font-weight:900;
       letter-spacing:2px;
-      background:linear-gradient(135deg,#c084fc,#8b5cf6,#ec4899);
+      background:linear-gradient(135deg,#ff8fc9,#ff2d95,#ff5fad);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
     }
     .nav-links { display:flex; gap:36px; }
@@ -165,19 +147,19 @@
       opacity:0; animation:fadeUp .8s .45s forwards;
     }
     .name-inner {
-      background:linear-gradient(135deg,#d8b4fe,#8b5cf6,#ec4899);
+      background:linear-gradient(135deg,#ffc2e0,#ff2d95,#ff5fad);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
       position:relative; display:inline-block;
     }
     .name-inner::before {
       content:attr(data-text); position:absolute; inset:0;
-      background:linear-gradient(135deg,#22d3ee,#6366f1);
+      background:linear-gradient(135deg,#ff5fad,#ff5fad);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
       animation:g1 5s infinite; clip-path:polygon(0 0,100% 0,100% 38%,0 38%);
     }
     .name-inner::after {
       content:attr(data-text); position:absolute; inset:0;
-      background:linear-gradient(135deg,#ec4899,#f43f5e);
+      background:linear-gradient(135deg,#ff5fad,#ff3d7f);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
       animation:g2 5s infinite; clip-path:polygon(0 62%,100% 62%,100% 100%,0 100%);
     }
@@ -215,7 +197,7 @@
       backdrop-filter:blur(10px);
       transition:all .3s;
     }
-    .badge:hover { border-color:var(--purple); color:var(--purple); background:rgba(139,92,246,.1); }
+    .badge:hover { border-color:var(--purple); color:var(--purple); background:rgba(255,45,149,.1); }
 
     .scroll-hint {
       position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
@@ -256,7 +238,7 @@
     .about-wrap::before {
       content:''; position:absolute; top:-60%; left:-40%;
       width:200%; height:200%;
-      background:radial-gradient(circle at 40% 40%,rgba(139,92,246,.06) 0%,transparent 60%);
+      background:radial-gradient(circle at 40% 40%,rgba(255,45,149,.06) 0%,transparent 60%);
       pointer-events:none;
     }
 
@@ -270,9 +252,9 @@
       border:1px solid;
       pointer-events:none;
     }
-    .ring-1 { inset:-13px; border-color:rgba(139,92,246,.65); animation:breath 3.2s ease-in-out infinite; }
-    .ring-2 { inset:-28px; border-color:rgba(139,92,246,.3);  animation:breath 3.2s ease-in-out infinite .55s; }
-    .ring-3 { inset:-44px; border-color:rgba(236,72,153,.18); animation:breath 3.2s ease-in-out infinite 1.1s; }
+    .ring-1 { inset:-13px; border-color:rgba(255,45,149,.65); animation:breath 3.2s ease-in-out infinite; }
+    .ring-2 { inset:-28px; border-color:rgba(255,45,149,.3);  animation:breath 3.2s ease-in-out infinite .55s; }
+    .ring-3 { inset:-44px; border-color:rgba(255,95,173,.18); animation:breath 3.2s ease-in-out infinite 1.1s; }
 
     @keyframes breath {
       0%,100% { transform:scale(.94); opacity:.35; }
@@ -291,8 +273,8 @@
       width:100%; height:100%; object-fit:cover; border-radius:50%; display:block;
     }
     @keyframes breathImg {
-      0%,100% { transform:scale(1);    box-shadow:0 0 18px var(--gp),0 0 36px rgba(139,92,246,.2); }
-      50%      { transform:scale(1.05); box-shadow:0 0 36px var(--gp),0 0 72px rgba(139,92,246,.3),0 0 90px var(--gpk); }
+      0%,100% { transform:scale(1);    box-shadow:0 0 18px var(--gp),0 0 36px rgba(255,45,149,.2); }
+      50%      { transform:scale(1.05); box-shadow:0 0 36px var(--gp),0 0 72px rgba(255,45,149,.3),0 0 90px var(--gpk); }
     }
 
     .about-text h2 {
@@ -307,7 +289,7 @@
     .about-tags { display:flex; gap:8px; flex-wrap:wrap; }
     .a-tag {
       padding:5px 13px; border-radius:100px;
-      background:rgba(139,92,246,.1); border:1px solid rgba(139,92,246,.3);
+      background:rgba(255,45,149,.1); border:1px solid rgba(255,45,149,.3);
       font-size:.72rem; color:var(--purple); font-family:'JetBrains Mono',monospace;
     }
 
@@ -339,8 +321,8 @@
     .phone-grid-floor{
       position:absolute; inset:auto 0 6% 0; height:55%;
       background-image:
-        linear-gradient(rgba(192,132,252,.08) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(192,132,252,.08) 1px,transparent 1px);
+        linear-gradient(rgba(255,143,201,.08) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,143,201,.08) 1px,transparent 1px);
       background-size:22px 22px;
       -webkit-mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.9));
       mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.9));
@@ -349,7 +331,7 @@
     }
     .phone-aura{
       position:absolute; width:280px; height:280px; border-radius:50%;
-      background:radial-gradient(circle,rgba(139,92,246,.32) 0%,rgba(217,70,239,.14) 45%,transparent 72%);
+      background:radial-gradient(circle,rgba(255,45,149,.32) 0%,rgba(255,31,143,.14) 45%,transparent 72%);
       filter:blur(8px);
       animation:auraPulse 4.4s ease-in-out infinite;
       pointer-events:none;
@@ -360,11 +342,11 @@
     }
     .energy-ring{
       position:absolute; width:160px; height:340px; border-radius:74px;
-      border:1px solid rgba(217,70,239,.35);
+      border:1px solid rgba(255,31,143,.35);
       pointer-events:none;
       animation:ringPulse 3.6s cubic-bezier(.4,0,.3,1) infinite;
     }
-    .energy-ring.er-2{ animation-delay:1.8s; border-color:rgba(139,92,246,.3); }
+    .energy-ring.er-2{ animation-delay:1.8s; border-color:rgba(255,45,149,.3); }
     @keyframes ringPulse{
       0%   { transform:scale(.85); opacity:0; }
       35%  { opacity:.7; }
@@ -384,26 +366,26 @@
     }
     .phone-svg{
       width:100%; height:100%; overflow:visible;
-      filter:drop-shadow(0 0 14px rgba(139,92,246,.55)) drop-shadow(0 0 30px rgba(217,70,239,.28));
+      filter:drop-shadow(0 0 14px rgba(255,45,149,.55)) drop-shadow(0 0 30px rgba(255,31,143,.28));
       animation:glowBreath 3.2s ease-in-out infinite;
     }
     @keyframes glowBreath{
-      0%,100%{ filter:drop-shadow(0 0 10px rgba(139,92,246,.45)) drop-shadow(0 0 22px rgba(217,70,239,.22)); }
-      50%    { filter:drop-shadow(0 0 20px rgba(139,92,246,.75)) drop-shadow(0 0 42px rgba(217,70,239,.4)); }
+      0%,100%{ filter:drop-shadow(0 0 10px rgba(255,45,149,.45)) drop-shadow(0 0 22px rgba(255,31,143,.22)); }
+      50%    { filter:drop-shadow(0 0 20px rgba(255,45,149,.75)) drop-shadow(0 0 42px rgba(255,31,143,.4)); }
     }
-    .p-island,.p-lens,.p-flash,.p-logobg,.p-btn{ filter:drop-shadow(0 0 4px rgba(217,70,239,.4)); }
-    .p-dot{ filter:drop-shadow(0 0 5px #d946ef); }
+    .p-island,.p-lens,.p-flash,.p-logobg,.p-btn,.p-front-cam{ filter:drop-shadow(0 0 4px rgba(255,31,143,.4)); }
+    .p-dot{ filter:drop-shadow(0 0 5px #ff1f8f); }
     .p-label{
       font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.5px;
-      fill:#e9d5ff; opacity:.75;
+      fill:#ffd9ec; opacity:.75;
     }
 
     .phone-tag{
       position:absolute; bottom:0; left:50%; transform:translateX(-50%);
       display:flex; align-items:center; gap:7px;
       padding:6px 16px; border-radius:100px;
-      background:rgba(217,70,239,.1); border:1px solid rgba(217,70,239,.4);
-      font-family:'JetBrains Mono',monospace; font-size:.74rem; color:#f0abfc;
+      background:rgba(255,31,143,.1); border:1px solid rgba(255,31,143,.4);
+      font-family:'JetBrains Mono',monospace; font-size:.74rem; color:#ffb3d9;
       backdrop-filter:blur(8px);
     }
     .pt-dot{ width:6px; height:6px; border-radius:50%; background:var(--glow); box-shadow:0 0 8px var(--glow); }
@@ -428,8 +410,8 @@
       font-family:'JetBrains Mono',monospace; font-size:.78rem; padding:7px 16px;
       border-radius:8px;
     }
-    .rom-chip.os { background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.35); color:var(--accent); }
-    .rom-chip.rom{ background:rgba(217,70,239,.1); border:1px solid rgba(217,70,239,.35); color:#f0abfc; }
+    .rom-chip.os { background:rgba(255,45,149,.12); border:1px solid rgba(255,45,149,.35); color:var(--accent); }
+    .rom-chip.rom{ background:rgba(255,31,143,.1); border:1px solid rgba(255,31,143,.35); color:#ffb3d9; }
 
     .maint-badges{ display:flex; flex-wrap:wrap; gap:9px; margin-bottom:30px; }
     .mbadge{
@@ -439,9 +421,9 @@
       transition:all .3s;
     }
     .mbadge:hover{
-      color:#f0abfc; border-color:var(--glow);
-      background:rgba(217,70,239,.1);
-      box-shadow:0 0 16px rgba(217,70,239,.3);
+      color:#ffb3d9; border-color:var(--glow);
+      background:rgba(255,31,143,.1);
+      box-shadow:0 0 16px rgba(255,31,143,.3);
       transform:translateY(-2px);
     }
 
@@ -450,7 +432,7 @@
       position:relative;
       background:var(--card); border:1px solid var(--border); border-radius:14px;
       overflow:hidden;
-      box-shadow:0 20px 50px rgba(0,0,0,.6), 0 0 0 1px rgba(139,92,246,.06) inset;
+      box-shadow:0 20px 50px rgba(0,0,0,.6), 0 0 0 1px rgba(255,45,149,.06) inset;
     }
     .build-terminal::before{
       content:''; position:absolute; top:0; left:0; right:0; height:2px; z-index:1;
@@ -484,7 +466,7 @@
       white-space:pre-wrap; word-break:break-word;
       color:var(--muted);
     }
-    .term-body .c-cmd  { color:#e9d5ff; }
+    .term-body .c-cmd  { color:#ffd9ec; }
     .term-body .c-cmd::before{ content:'$ '; color:var(--purple); }
     .term-body .c-ok   { color:var(--green); }
     .term-body .c-tag  { color:var(--accent); }
@@ -536,10 +518,10 @@
       background:linear-gradient(90deg,transparent,var(--purple),transparent);
       opacity:0; transition:opacity .4s;
     }
-    .pcard:hover { transform:translateY(-7px); border-color:rgba(139,92,246,.42); box-shadow:0 22px 60px rgba(139,92,246,.14); }
+    .pcard:hover { transform:translateY(-7px); border-color:rgba(255,45,149,.42); box-shadow:0 22px 60px rgba(255,45,149,.14); }
     .pcard:hover::before { opacity:1; }
-    .pcard.upcoming { border-color:rgba(236,72,153,.12); }
-    .pcard.upcoming:hover { border-color:rgba(236,72,153,.4); box-shadow:0 22px 60px rgba(236,72,153,.1); }
+    .pcard.upcoming { border-color:rgba(255,95,173,.12); }
+    .pcard.upcoming:hover { border-color:rgba(255,95,173,.4); box-shadow:0 22px 60px rgba(255,95,173,.1); }
     .pcard.upcoming::before { background:linear-gradient(90deg,transparent,var(--pink),transparent); }
 
     /* card corner tag */
@@ -550,14 +532,14 @@
       border-bottom-left-radius:12px; border-top-right-radius:20px;
     }
     .corner-tag.live     { background:rgba(16,185,129,.15); color:var(--green);  border-bottom:1px solid rgba(16,185,129,.3); border-left:1px solid rgba(16,185,129,.3); }
-    .corner-tag.upcoming { background:rgba(236,72,153,.12); color:var(--pink);   border-bottom:1px solid rgba(236,72,153,.3); border-left:1px solid rgba(236,72,153,.3); }
+    .corner-tag.upcoming { background:rgba(255,95,173,.12); color:var(--pink);   border-bottom:1px solid rgba(255,95,173,.3); border-left:1px solid rgba(255,95,173,.3); }
 
     .card-status { display:flex; align-items:center; gap:8px; margin-bottom:22px; }
     .sdot { width:8px; height:8px; border-radius:50%; }
     .sdot.live    { background:var(--green); animation:pg 2s infinite; }
     .sdot.upcoming{ background:var(--pink);  animation:pp 2s infinite; }
     @keyframes pg { 0%,100%{box-shadow:0 0 5px var(--green);}50%{box-shadow:0 0 14px var(--green),0 0 24px rgba(16,185,129,.5);} }
-    @keyframes pp { 0%,100%{box-shadow:0 0 5px var(--pink);}50%{box-shadow:0 0 14px var(--pink),0 0 24px rgba(236,72,153,.5);} }
+    @keyframes pp { 0%,100%{box-shadow:0 0 5px var(--pink);}50%{box-shadow:0 0 14px var(--pink),0 0 24px rgba(255,95,173,.5);} }
     .slabel { font-family:'JetBrains Mono',monospace; font-size:.68rem; letter-spacing:2px; text-transform:uppercase; }
     .slabel.live    { color:var(--green); }
     .slabel.upcoming{ color:var(--pink); }
@@ -567,8 +549,8 @@
       display:flex; align-items:center; justify-content:center;
       font-size:1.7rem; margin-bottom:18px;
     }
-    .rom-icon.cr  { background:rgba(139,92,246,.12); border:1px solid rgba(139,92,246,.28); }
-    .rom-icon.evox{ background:rgba(236,72,153,.12); border:1px solid rgba(236,72,153,.28); }
+    .rom-icon.cr  { background:rgba(255,45,149,.12); border:1px solid rgba(255,45,149,.28); }
+    .rom-icon.evox{ background:rgba(255,95,173,.12); border:1px solid rgba(255,95,173,.28); }
 
     .pcard h3 {
       font-family:'Orbitron',monospace; font-size:1.35rem; font-weight:700;
@@ -585,23 +567,23 @@
       font-family:'JetBrains Mono',monospace; font-size:.68rem;
     }
     .chip.a  { background:rgba(16,185,129,.1);  color:var(--green); border:1px solid rgba(16,185,129,.2); }
-    .chip.r  { background:rgba(139,92,246,.1);  color:var(--purple);border:1px solid rgba(139,92,246,.2); }
-    .chip.s  { background:rgba(236,72,153,.1);  color:var(--pink);  border:1px solid rgba(236,72,153,.2); }
+    .chip.r  { background:rgba(255,45,149,.1);  color:var(--purple);border:1px solid rgba(255,45,149,.2); }
+    .chip.s  { background:rgba(255,95,173,.1);  color:var(--pink);  border:1px solid rgba(255,95,173,.2); }
 
     .plink {
       display:inline-flex; align-items:center; gap:8px;
       padding:9px 20px;
-      border:1px solid rgba(139,92,246,.4); border-radius:10px;
-      background:rgba(139,92,246,.08);
+      border:1px solid rgba(255,45,149,.4); border-radius:10px;
+      background:rgba(255,45,149,.08);
       color:var(--purple); text-decoration:none;
       font-family:'JetBrains Mono',monospace; font-size:.78rem;
       transition:all .3s; cursor:pointer;
     }
-    .plink:hover { background:rgba(139,92,246,.18); color:var(--text); }
+    .plink:hover { background:rgba(255,45,149,.18); color:var(--text); }
     .plink.off {
       opacity:.55; cursor:default;
-      border-color:rgba(236,72,153,.3); color:var(--pink);
-      background:rgba(236,72,153,.06);
+      border-color:rgba(255,95,173,.3); color:var(--pink);
+      background:rgba(255,95,173,.06);
     }
 
     /* ═══════════════════════════════
@@ -616,7 +598,7 @@
     }
     .gh-inner::after {
       content:''; position:absolute; inset:0;
-      background:radial-gradient(ellipse at top,rgba(139,92,246,.07) 0%,transparent 70%);
+      background:radial-gradient(ellipse at top,rgba(255,45,149,.07) 0%,transparent 70%);
       pointer-events:none;
     }
     .gh-ico {
@@ -635,9 +617,9 @@
       color:#fff; text-decoration:none;
       font-family:'JetBrains Mono',monospace; font-size:.88rem; font-weight:500;
       transition:all .3s;
-      box-shadow:0 10px 28px rgba(124,58,237,.3);
+      box-shadow:0 10px 28px rgba(224,23,125,.3);
     }
-    .gh-btn:hover { transform:translateY(-3px); box-shadow:0 18px 40px rgba(124,58,237,.5); }
+    .gh-btn:hover { transform:translateY(-3px); box-shadow:0 18px 40px rgba(224,23,125,.5); }
 
     /* ═══════════════════════════════
        FOOTER
@@ -655,21 +637,21 @@
     .music-pl {
       position:fixed; bottom:28px; right:28px; z-index:300;
       display:flex; align-items:center; gap:10px;
-      background:rgba(7,7,26,.92);
+      background:rgba(5,1,3,.92);
       border:1px solid var(--border); border-radius:100px;
       padding:9px 16px 9px 9px;
       backdrop-filter:blur(24px);
       box-shadow:0 8px 32px rgba(0,0,0,.35);
       transition:all .3s;
     }
-    .music-pl:hover { border-color:rgba(139,92,246,.35); }
+    .music-pl:hover { border-color:rgba(255,45,149,.35); }
 
     .m-btn {
       width:34px; height:34px; border-radius:50%;
       border:none; background:linear-gradient(135deg,var(--violet),var(--purple));
       cursor:pointer; display:flex; align-items:center; justify-content:center;
       font-size:.95rem; flex-shrink:0;
-      transition:all .3s; box-shadow:0 0 12px rgba(139,92,246,.4);
+      transition:all .3s; box-shadow:0 0 12px rgba(255,45,149,.4);
     }
     .m-btn:hover { transform:scale(1.12); box-shadow:0 0 22px var(--gp); }
 
@@ -718,7 +700,7 @@
       }
       .nav-links.open{ transform:translateX(0); }
       .nav-links a{
-        padding:16px 20px; border-bottom:1px solid rgba(139,92,246,.08);
+        padding:16px 20px; border-bottom:1px solid rgba(255,45,149,.08);
         font-size:.85rem;
       }
       .nav-links a::after{ display:none; }
@@ -738,10 +720,6 @@
   <!-- Canvas + Grid -->
   <canvas id="sk"></canvas>
   <div class="bg-grid"></div>
-
-  <!-- Custom cursor -->
-  <div id="cur"></div>
-  <div id="cur-ring"></div>
 
   <!-- NAV -->
   <nav>
@@ -767,12 +745,12 @@
           <span class="name-inner" data-text="Minit">Minit</span>
         </h1>
         <p class="hero-tagline">
-          <span class="hl">AOSP enthusiast</span> &amp; custom ROM developer
+          <span class="hl">CUSTOM ROM Developer</span> &amp; WEB DESIGN
         </p>
         <div class="hero-badges">
           <span class="badge">📱 AOSP</span>
           <span class="badge">🔧 Custom ROMs</span>
-          <span class="badge">⚡ Android  16+</span>
+          <span class="badge">⚡ Android 16</span>
           <span class="badge">🎓 Student</span>
         </div>
       </div>
@@ -796,17 +774,18 @@
 
         <div class="about-text">
           <h2>About Me</h2>
-          <div class="sec">
-    <div class="about-grid">
-      <div class="about-text reveal left">
-        <span class="greeting">Hey, I'm <span class="r">Minit</span></span>
-        <p>A developer who builds <strong>custom Android ROMs from AOSP source</strong> and a photographer who shoots everything on a smartphone — the same device I just flashed.</p>
-        <p>Currently <strong>maintaining manaus</strong> (Moto Edge 40 Neo) — kernel optimizations, and keeping it updated with latest security patches.</p>
-        <p>By evening I'm chasing <strong>golden hour light</strong>. By night I'm staring at build logs. Both feel the same kind of satisfying when they come together.</p>
-        <div class="fun-note"></div>
-      </div>
+          <p>
+            Hey, I'm <em>Minit</em> — a 16-year-old student with a real passion for understanding
+            how things like <em>AOSP</em> and <em>Android</em> actually work under the hood. What
+            started as plain curiosity turned into late nights inside the AOSP source tree,
+            picking apart device trees, and chasing build errors that take way too long to figure
+            out. I build everything on a remote server PC, since compiling AOSP from scratch needs
+            more power than my own laptop can handle. I'm not doing any of this for clout or money —
+            I genuinely just enjoy learning how it all fits together. Purely for fun.
+            <em>Understanding How Things Works is Me 
+          </p>
           <div class="about-tags">
-            <span class="a-tag">Student</span>
+            <span class="a-tag">16-year-old Student</span>
             <span class="a-tag">AOSP Builder</span>
             <span class="a-tag">ROM Dev</span>
             <span class="a-tag">Moto Manaus</span>
@@ -842,46 +821,52 @@
             <svg class="phone-svg" viewBox="0 0 240 500" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="phoneStroke" x1="0" y1="0" x2="240" y2="500" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="#d8b4fe"/>
-                  <stop offset=".5" stop-color="#8b5cf6"/>
-                  <stop offset="1" stop-color="#ec4899"/>
+                  <stop offset="0" stop-color="#ffc2e0"/>
+                  <stop offset=".5" stop-color="#ff2d95"/>
+                  <stop offset="1" stop-color="#ff5fad"/>
                 </linearGradient>
               </defs>
 
               <!-- body -->
               <rect x="10" y="8" width="220" height="484" rx="48" ry="48" stroke="url(#phoneStroke)" stroke-width="2.4" class="p-body"/>
-              <rect x="19" y="17" width="202" height="466" rx="40" ry="40" stroke="#c084fc" stroke-width="1" opacity=".28" class="p-edge"/>
+              <rect x="19" y="17" width="202" height="466" rx="40" ry="40" stroke="#ff8fc9" stroke-width="1" opacity=".28" class="p-edge"/>
+
+              <!-- front-facing punch-hole camera -->
+              <circle cx="120" cy="34" r="4" class="p-front-cam" stroke="#ff8fc9" stroke-width="1.2" opacity=".55"/>
+              <circle cx="120" cy="34" r="1.6" fill="#ff8fc9" opacity=".7"/>
 
               <!-- antenna lines -->
-              <line x1="44" y1="24" x2="110" y2="24" stroke="#c084fc" stroke-width="1.4" opacity=".35"/>
-              <line x1="150" y1="480" x2="196" y2="480" stroke="#c084fc" stroke-width="1.4" opacity=".35"/>
+              <line x1="44" y1="24" x2="100" y2="24" stroke="#ff8fc9" stroke-width="1.4" opacity=".35"/>
+              <line x1="150" y1="480" x2="196" y2="480" stroke="#ff8fc9" stroke-width="1.4" opacity=".35"/>
 
               <!-- side buttons -->
-              <rect x="225" y="146" width="6" height="40" rx="3" class="p-btn" stroke="#d946ef" stroke-width="1.4"/>
-              <rect x="225" y="196" width="6" height="58" rx="3" class="p-btn" stroke="#d946ef" stroke-width="1.4"/>
+              <rect x="225" y="146" width="6" height="40" rx="3" class="p-btn" stroke="#ff1f8f" stroke-width="1.4"/>
+              <rect x="225" y="196" width="6" height="58" rx="3" class="p-btn" stroke="#ff1f8f" stroke-width="1.4"/>
 
-              <!-- camera island -->
-              <rect x="34" y="34" width="90" height="128" rx="22" ry="22" class="p-island" stroke="#ec4899" stroke-width="1.8"/>
-              <circle cx="64" cy="70" r="26" class="p-lens" stroke="url(#phoneStroke)" stroke-width="1.8"/>
-              <circle cx="64" cy="70" r="17" stroke="#d946ef" stroke-width="1" opacity=".5"/>
-              <circle cx="64" cy="70" r="3.2" fill="#d946ef" class="p-dot"/>
-              <circle cx="64" cy="130" r="24" class="p-lens" stroke="url(#phoneStroke)" stroke-width="1.8"/>
-              <circle cx="64" cy="130" r="15" stroke="#d946ef" stroke-width="1" opacity=".5"/>
-              <circle cx="64" cy="130" r="3" fill="#d946ef" class="p-dot"/>
-              <circle cx="100" cy="100" r="6.5" class="p-flash" stroke="#c084fc" stroke-width="1.4"/>
-              <text x="94" y="58" class="p-label">50MP</text>
-              <line x1="94" y1="64" x2="118" y2="64" stroke="#c084fc" stroke-width=".8" opacity=".4"/>
+              <!-- camera island — dual rear camera, sized and inset to match the real device proportions -->
+              <rect x="28" y="30" width="78" height="118" rx="20" ry="20" class="p-island" stroke="#ff5fad" stroke-width="1.8"/>
+              <circle cx="58" cy="64" r="21" class="p-lens" stroke="url(#phoneStroke)" stroke-width="1.8"/>
+              <circle cx="58" cy="64" r="14" stroke="#ff1f8f" stroke-width="1" opacity=".5"/>
+              <circle cx="58" cy="64" r="2.8" fill="#ff1f8f" class="p-dot"/>
+              <circle cx="58" cy="114" r="17" class="p-lens" stroke="url(#phoneStroke)" stroke-width="1.8"/>
+              <circle cx="58" cy="114" r="11.5" stroke="#ff1f8f" stroke-width="1" opacity=".5"/>
+              <circle cx="58" cy="114" r="2.4" fill="#ff1f8f" class="p-dot"/>
+              <circle cx="88" cy="89" r="6" class="p-flash" stroke="#ff8fc9" stroke-width="1.4"/>
+              <text x="112" y="60" class="p-label">50MP</text>
+              <line x1="112" y1="66" x2="134" y2="66" stroke="#ff8fc9" stroke-width=".8" opacity=".4"/>
+              <text x="112" y="118" class="p-label">13MP</text>
+              <line x1="112" y1="124" x2="134" y2="124" stroke="#ff8fc9" stroke-width=".8" opacity=".4"/>
 
               <!-- logo -->
               <g transform="translate(120,302)">
                 <circle r="36" class="p-logobg" stroke="url(#phoneStroke)" stroke-width="1.8"/>
                 <path d="M -18,-17 C -31,-3 -23,14 -3,19" stroke="#f1f5f9" stroke-width="2.8" stroke-linecap="round" fill="none" opacity=".9"/>
                 <path d="M 18,-17 C 31,-3 23,14 3,19" stroke="#f1f5f9" stroke-width="2.8" stroke-linecap="round" fill="none" opacity=".9"/>
-                <circle cx="0" cy="21" r="3.4" fill="#d946ef" class="p-dot"/>
+                <circle cx="0" cy="21" r="3.4" fill="#ff1f8f" class="p-dot"/>
               </g>
 
               <!-- bottom port -->
-              <rect x="108" y="476" width="24" height="4" rx="2" stroke="#c084fc" stroke-width="1" opacity=".4"/>
+              <rect x="108" y="476" width="24" height="4" rx="2" stroke="#ff8fc9" stroke-width="1" opacity=".4"/>
             </svg>
           </div>
 
@@ -917,7 +902,7 @@
           <div class="build-terminal" id="buildTerminal">
             <div class="term-bar">
               <span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span>
-              <span class="term-path">minit@aosp-build ~/android/crdroid-16 <em>[manaus]</em></span>
+              <span class="term-path">minit@aosp-build ~/android/lineage-16 <em>[manaus]</em></span>
             </div>
             <pre class="term-body" id="termBody"></pre>
             <div class="term-footer">
@@ -946,19 +931,19 @@
 
       
 <div class="proj-grid">
-  <a href="https://t.me/minitxt00" target="_blank" class="pcard reveal" style="text-decoration:none;color:inherit;display:block;">
+  <a href="roms.html" class="pcard reveal" style="text-decoration:none;color:inherit;display:block;">
     <div class="corner-tag live">OPEN</div>
     <div class="card-status">
       <div class="sdot live"></div>
-      <span class="slabel live">AOSP COLLECTION</span>
+      <span class="slabel live">LINEAGEOS BASED</span>
     </div>
-    <h3>AOSP for Moto Edge 40 Neo</h3>
+    <h3>LineageOS for Moto Edge 40 Neo</h3>
     <div class="p-device">Motorola Edge 40 Neo</div>
     <p class="p-desc">
-      Click here to view all available ROMs for Moto Edge 40 Neo including
-      crDroid, Evolution X and future builds.
+      A LineageOS based custom ROM running Android 16, built from source for the
+      Moto Edge 40 Neo. Click view to check it out and grab the latest build.
     </p>
-    <div class="plink">View all ROMs →</div>
+    <div class="plink">View →</div>
   </a>
 </div>
 </section>
@@ -970,7 +955,7 @@
         <div class="gh-ico">🐙</div>
         <h2>Find Me on GitHub</h2>
         <p>Device trees, kernel sources, and all the ROM work live here.</p>
-        <a href="https://github.com/MinitxT" target="_blank" class="gh-btn">
+        <a href="https://github.com/Minit" target="_blank" class="gh-btn">
           github.com/Minit →
         </a>
       </div>
@@ -978,7 +963,7 @@
 
     <!-- FOOTER -->
     <footer>
-      crafted with <span class="pk">♥</span> by Minit &nbsp;·&nbsp; AOSP enthusiast &nbsp;·&nbsp; student who builds ROMs for fun
+      crafted with <span class="pk">♥</span> by Minit &nbsp;·&nbsp; AOSP Developer &nbsp;·&nbsp; student who builds ROMs for fun
     </footer>
 
   </main>
@@ -987,7 +972,7 @@
   <div class="music-pl paused" id="musicPl">
     <button class="m-btn" id="mBtn" onclick="toggleMusic()">🎵</button>
     <div class="m-info">
-      <span class="m-title">Golden Brown Lofi</span>
+      <span class="m-title">Lofi Beats</span>
       <span class="m-subtitle" id="mSub">click to play</span>
     </div>
     <div class="m-bars">
@@ -999,16 +984,6 @@
     </div>
   </div>
 
-  <!-- Hidden YouTube embed -->
-  <iframe
-    id="ytf"
-    width="0" height="0"
-    src="about:blank"
-    frameborder="0"
-    allow="autoplay"
-    style="position:fixed;bottom:-200px;left:-200px;opacity:0;pointer-events:none;"
-  ></iframe>
-
   <script>
   /* ══════════════════════════════════════
      REDUCED MOTION
@@ -1016,40 +991,8 @@
   const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ══════════════════════════════════════
-     CUSTOM CURSOR
-  ══════════════════════════════════════ */
-  const cur     = document.getElementById('cur');
-  const curRing = document.getElementById('cur-ring');
-  let mx=0,my=0,rx=0,ry=0;
-
-  document.addEventListener('mousemove',e=>{
-    mx=e.clientX; my=e.clientY;
-    cur.style.left = mx+'px';
-    cur.style.top  = my+'px';
-  });
-
-  ;(function ringLoop(){
-    rx += (mx-rx)*.12;
-    ry += (my-ry)*.12;
-    curRing.style.left = rx+'px';
-    curRing.style.top  = ry+'px';
-    requestAnimationFrame(ringLoop);
-  })();
-
-  document.querySelectorAll('a,button,.pcard,.badge,.plink').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{
-      cur.style.transform='translate(-50%,-50%) scale(2.4)';
-      curRing.style.transform='translate(-50%,-50%) scale(1.6)';
-    });
-    el.addEventListener('mouseleave',()=>{
-      cur.style.transform='translate(-50%,-50%) scale(1)';
-      curRing.style.transform='translate(-50%,-50%) scale(1)';
-    });
-  });
-
-  /* ══════════════════════════════════════
-     PARTICLE ECOSYSTEM
-     layered: energy orbs → neon dust → glow particles → sparks
+     PARTICLE ECOSYSTEM (sakura petals)
+     layered: drifting petals → neon dust → glow particles → sparks
      soft motion trails via translucent canvas fill, 60fps rAF
   ══════════════════════════════════════ */
   const sk  = document.getElementById('sk');
@@ -1060,9 +1003,49 @@
   window.addEventListener('resize',resize);
 
   const MOBILE = window.innerWidth < 720;
-  const GLOW_COLORS = [[139,92,246],[236,72,153],[124,58,237],[192,132,252],[217,70,239]];
+  const GLOW_COLORS = [[255,45,149],[255,95,173],[255,31,143],[255,143,201],[224,23,125]];
   const rnd = (a,b)=> a + Math.random()*(b-a);
   const pick = ()=> GLOW_COLORS[Math.floor(Math.random()*GLOW_COLORS.length)];
+
+  /* layer 0 — sakura petals: drifting, rotating, falling pink petals */
+  class Petal{
+    constructor(){ this.reset(true); }
+    reset(spread){
+      this.x = Math.random()*sk.width;
+      this.y = spread ? Math.random()*sk.height : -20;
+      this.sz = rnd(7,15);
+      this.vy = rnd(.35,.9);
+      this.vx = rnd(-.35,.35);
+      this.rot = rnd(0,Math.PI*2);
+      this.vr = rnd(-.018,.018);
+      this.sway = rnd(0,Math.PI*2); this.sws = rnd(.01,.025); this.swAmt = rnd(.4,1.1);
+      this.op = rnd(.45,.85);
+      const c = pick(); this.col = `rgb(${c[0]},${c[1]},${c[2]})`;
+    }
+    update(){
+      this.sway += this.sws;
+      this.x += this.vx + Math.sin(this.sway)*this.swAmt*.3;
+      this.y += this.vy;
+      this.rot += this.vr;
+      if(this.y > sk.height+20) this.reset(false);
+    }
+    draw(){
+      skx.save();
+      skx.translate(this.x,this.y);
+      skx.rotate(this.rot);
+      skx.globalAlpha = this.op;
+      skx.shadowColor = this.col;
+      skx.shadowBlur = this.sz*1.6;
+      skx.fillStyle = this.col;
+      // simple petal shape: two overlapping curves forming a leaf/petal silhouette
+      skx.beginPath();
+      skx.moveTo(0,-this.sz*.55);
+      skx.bezierCurveTo(this.sz*.55,-this.sz*.4, this.sz*.5,this.sz*.35, 0,this.sz*.6);
+      skx.bezierCurveTo(-this.sz*.5,this.sz*.35, -this.sz*.55,-this.sz*.4, 0,-this.sz*.55);
+      skx.fill();
+      skx.restore();
+    }
+  }
 
   /* layer 1 — energy orbs: large, slow, heavily blurred */
   class Orb{
@@ -1164,11 +1147,12 @@
     }
   }
 
-  const ORB_N=MOBILE?3:6, DUST_N=MOBILE?40:90, GLOW_N=MOBILE?22:42, SPARK_N=7;
+  const ORB_N=MOBILE?3:6, DUST_N=MOBILE?40:90, GLOW_N=MOBILE?22:42, SPARK_N=7, PETAL_N=MOBILE?14:26;
   const orbs   = Array.from({length:ORB_N }, ()=>new Orb());
   const dustP  = Array.from({length:DUST_N}, ()=>new Dust());
   const glowsP = Array.from({length:GLOW_N}, ()=>new Glow());
   const sparks = Array.from({length:SPARK_N},()=>new Spark());
+  const petals = Array.from({length:PETAL_N},()=>new Petal());
 
   if (REDUCE) {
     // single static frame — no continuous motion for reduced-motion users
@@ -1176,6 +1160,7 @@
     orbs.forEach(o=>o.draw());
     dustP.forEach(d=>d.draw());
     glowsP.forEach(g=>g.draw());
+    petals.forEach(p=>p.draw());
   } else {
     ;(function loop(){
       skx.fillStyle='rgba(0,0,0,.16)';      // soft fading trail instead of hard clear
@@ -1184,6 +1169,7 @@
       orbs.forEach(o=>{ o.update(); o.draw(); });
       dustP.forEach(d=>{ d.update(); d.draw(); });
       glowsP.forEach(g=>{ g.update(); g.draw(); });
+      petals.forEach(p=>{ p.update(); p.draw(); });
 
       if(Math.random()<.025){
         const s = sparks.find(s=>!s.alive);
@@ -1245,24 +1231,24 @@
 
     // each line: [type, text]  type → cmd | ok | tag | dim | pink | blank
     const LINES = [
-      ['cmd',  'repo init -u https://github.com/crdroidandroid/android.git -b 16.0'],
+      ['cmd',  'repo init -u https://github.com/LineageOS/android.git -b lineage-22.2'],
       ['dim',  'Fetching manifest ... '],
       ['ok',   'done ✓'],
       ['blank',''],
-      ['cmd',  'source build/envsetup.sh && breakfast manaus'],
+      ['cmd',  'source build/envsetup.sh && lunch lineage_manaus-userdebug'],
       ['dim',  'including device/motorola/manaus/AndroidProducts.mk'],
       ['tag',  'Moto Edge 40 Neo • Android 16 • '],
       ['ok',   'ready ✓'],
       ['blank',''],
-      ['cmd',  'brunch manaus'],
+      ['cmd',  'mka bacon'],
       ['dim',  '[kernel] compiling with Clang 20 + LTO ...'],
       ['dim',  '[system] building Android 16 framework ...'],
       ['dim',  '[vendor] patching Motorola blobs ...'],
-      ['pink', '[rom] syncing crDroid Android 16 sources ...'],
+      ['pink', '[rom] syncing LineageOS Android 16 sources ...'],
       ['pink', '[rom] generating OTA package ...'],
       ['pink', '[ota] signing official build ...'],
       ['blank',''],
-      ['tag',  'crDroidAndroid-16.0-manaus.zip ready for flash ✓'],
+      ['tag',  'lineage-16.0-manaus.zip ready for flash ✓'],
       ['ok',   'Custom ROM Developer Build ✓'],
     ];
 
@@ -1333,45 +1319,102 @@
 
   /* ══════════════════════════════════════
      MUSIC PLAYER
-     Using YouTube IFrame API
+     A fully self-contained lofi ambient loop, generated live
+     with the Web Audio API — no external file, no YouTube
+     embed, no network request at all. This means it plays the
+     same way whether the page is opened directly from disk or
+     hosted on GitHub Pages, with nothing that can go stale or
+     get blocked.
   ══════════════════════════════════════ */
-  let isPlaying=false, ytReady=false, ytP=null;
+  let isPlaying=false, audioCtx=null, masterGain=null, chordTimer=null;
+  const voiceOscs=[];
+  let chordIndex=0;
 
-  // Load YT API
-  window.onYouTubeIframeAPIReady=function(){
-    ytP=new YT.Player('ytf',{
-      videoId:'5qap5aO4i9A',   // lofi girl 24/7 — swap ID for any golden brown lofi track
-      playerVars:{autoplay:0,loop:1,controls:0},
-      events:{
-        onReady:()=>{ ytReady=true; }
-      }
+  // warm, slowly-drifting chord loop (Hz) — Fmaj7 → Am7 → G6 → Em7
+  const CHORDS=[
+    [174.61,220.00,261.63,349.23],
+    [220.00,261.63,329.63,440.00],
+    [196.00,246.94,293.66,392.00],
+    [164.81,207.65,246.94,329.63],
+  ];
+
+  function initAudio(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0;
+    masterGain.connect(audioCtx.destination);
+
+    // warm lowpass with a slow "breathing" cutoff for that lofi tape-warble feel
+    const filter = audioCtx.createBiquadFilter();
+    filter.type='lowpass'; filter.frequency.value=900; filter.Q.value=0.7;
+    filter.connect(masterGain);
+
+    const lfo=audioCtx.createOscillator(); lfo.frequency.value=0.08;
+    const lfoGain=audioCtx.createGain(); lfoGain.gain.value=260;
+    lfo.connect(lfoGain); lfoGain.connect(filter.frequency); lfo.start();
+
+    // pad voices — soft detuned oscillators per chord tone
+    CHORDS[0].forEach((freq,i)=>{
+      const osc=audioCtx.createOscillator();
+      osc.type = i%2===0 ? 'triangle' : 'sine';
+      osc.frequency.value=freq;
+      osc.detune.value = rnd(-5,5);
+      const g=audioCtx.createGain(); g.gain.value=0.16;
+      osc.connect(g); g.connect(filter); osc.start();
+      voiceOscs.push({osc,gain:g});
     });
-  };
-  const yts=document.createElement('script');
-  yts.src='https://www.youtube.com/iframe_api';
-  document.head.appendChild(yts);
+
+    // soft vinyl crackle bed, filtered noise, very low level
+    const bufLen = audioCtx.sampleRate*2;
+    const noiseBuf = audioCtx.createBuffer(1,bufLen,audioCtx.sampleRate);
+    const data = noiseBuf.getChannelData(0);
+    for(let i=0;i<bufLen;i++) data[i] = (Math.random()*2-1) * (Math.random()<0.02 ? 1 : 0.15);
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = noiseBuf; noise.loop = true;
+    const noiseFilter = audioCtx.createBiquadFilter();
+    noiseFilter.type='highpass'; noiseFilter.frequency.value=2200;
+    const noiseGain = audioCtx.createGain(); noiseGain.gain.value=0.025;
+    noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(masterGain);
+    noise.start();
+
+    // cycle gently through the chord loop
+    chordTimer = setInterval(()=>{
+      chordIndex = (chordIndex+1) % CHORDS.length;
+      const chord = CHORDS[chordIndex];
+      voiceOscs.forEach((v,i)=>{
+        v.osc.frequency.setTargetAtTime(chord[i%chord.length], audioCtx.currentTime, 1.4);
+      });
+    }, 4200);
+  }
 
   function toggleMusic(){
     const pl  = document.getElementById('musicPl');
     const btn = document.getElementById('mBtn');
     const sub = document.getElementById('mSub');
-    isPlaying=!isPlaying;
+    isPlaying = !isPlaying;
 
     if(isPlaying){
       pl.classList.remove('paused');
       btn.textContent='⏸';
-      sub.textContent='playing...';
-      if(ytReady && ytP && ytP.playVideo){
-        ytP.playVideo();
-      } else {
-        // fallback — open in new tab
-        window.open('https://www.youtube.com/watch?v=5qap5aO4i9A','_blank');
-      }
+      sub.textContent='starting...';
+
+      initAudio();
+      audioCtx.resume().then(()=>{
+        masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+        masterGain.gain.setTargetAtTime(0.22, audioCtx.currentTime, 0.5);
+        sub.textContent='playing...';
+      });
     } else {
       pl.classList.add('paused');
       btn.textContent='🎵';
       sub.textContent='click to play';
-      if(ytReady && ytP && ytP.pauseVideo) ytP.pauseVideo();
+      if(audioCtx && masterGain){
+        masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+        masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.35);
+        setTimeout(()=>{ if(!isPlaying && audioCtx) audioCtx.suspend(); }, 500);
+      }
     }
   }
 
@@ -1385,7 +1428,7 @@
     let cur='';
     secs.forEach(s=>{ if(window.scrollY>=s.offsetTop-120) cur=s.id; });
     nlinks.forEach(a=>{
-      a.style.color = a.getAttribute('href')==='#'+cur ? '#8b5cf6' : '';
+      a.style.color = a.getAttribute('href')==='#'+cur ? '#ff2d95' : '';
     });
   });
 
